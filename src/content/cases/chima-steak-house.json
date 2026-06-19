@@ -1,0 +1,21 @@
+{
+  "title": "Chima Steak House",
+  "client": "Chima Steak House",
+  "segment": "Gastronomia",
+  "service": "Fotografia",
+  "cover": "chima-steak-house-01.jpg",
+  "description": "Ensaio fotográfico gastronômico — pratos, ambiente e experiência capturados para fortalecer a percepção da marca.",
+  "gallery": [
+    "chima-steak-house-01.jpg",
+    "chima-steak-house-02.jpg",
+    "chima-steak-house-03.jpg",
+    "chima-steak-house-04.jpg",
+    "chima-steak-house-05.jpg",
+    "chima-steak-house-06.jpg",
+    "chima-steak-house-07.jpg",
+    "chima-steak-house-08.jpg",
+    "chima-steak-house-09.jpg",
+    "chima-steak-house-10.jpg"
+  ],
+  "order": 3
+}

@@ -1,0 +1,28 @@
+{
+  "logo": "logo-white.png",
+  "copyright": "© CHRONOS Creation — Charlotte · Port Saint Lucie · Fortaleza · Foz do Iguaçu",
+  "nav": [
+    {
+      "label": "Sobre",
+      "href": "/#sobre"
+    },
+    {
+      "label": "Soluções",
+      "href": "/#servicos"
+    },
+    {
+      "label": "Portfólio",
+      "href": "/#portfolio"
+    }
+  ],
+  "social": [
+    {
+      "label": "Instagram @chronoscreation",
+      "href": "https://instagram.com/chronoscreation"
+    },
+    {
+      "label": "Instagram @chronoscreationbr",
+      "href": "https://instagram.com/chronoscreationbr"
+    }
+  ]
+}

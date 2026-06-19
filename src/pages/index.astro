@@ -1,0 +1,108 @@
+---
+export const prerender = true
+
+import { reader } from '../lib/reader'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Hero from '../components/Hero.astro'
+import MarqueeStrip from '../components/MarqueeStrip.astro'
+import Differentials from '../components/Differentials.astro'
+import About from '../components/About.astro'
+import Services from '../components/Services.astro'
+import Portfolio from '../components/Portfolio.astro'
+import Process from '../components/Process.astro'
+import CTAFinal from '../components/CTAFinal.astro'
+import Testimonials from '../components/Testimonials.astro'
+import Contact from '../components/Contact.astro'
+
+const home = await reader.singletons.home.read()
+const hero = home?.hero
+---
+
+<BaseLayout
+  title="CHRONOS Creation — Branding, Audiovisual & Estratégia Digital"
+  description="A Chronos une branding, estratégia e audiovisual para transformar empresas em marcas memoráveis. Charlotte, Foz do Iguaçu, Fortaleza."
+>
+  <Hero
+    title={hero?.title}
+    subtitle={hero?.subtitle}
+    cta={hero ? { label: hero.ctaLabel, href: hero.ctaHref } : undefined}
+    video
+    decorIcon="/icones/foguete.png"
+  />
+  <MarqueeStrip />
+  <Differentials />
+  <About />
+  <Services />
+  <div id="scroll-bg-zone" class="scroll-bg-zone">
+    <div class="scroll-bg-glow" aria-hidden="true"></div>
+    <div data-bg="#181818"><Portfolio /></div>
+    <div data-bg="#0e2030"><Process /></div>
+    <div data-bg="#062f47"><CTAFinal /></div>
+  </div>
+  <Testimonials />
+  <Contact />
+</BaseLayout>
+
+<style>
+  /* Fundo que transiciona de cor conforme o scroll passa por Projetos → Processo → CTA. */
+  .scroll-bg-zone {
+    position: relative;
+    overflow: hidden;
+    background-color: #181818;
+    transition: background-color 1s ease;
+  }
+  /* Conteúdo das seções acima do brilho. */
+  .scroll-bg-zone > [data-bg] {
+    position: relative;
+    z-index: 1;
+  }
+  /* Aurora cyan que flutua devagar atrás do trecho. */
+  .scroll-bg-glow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 80vw;
+    height: 80vw;
+    max-width: 900px;
+    max-height: 900px;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(51, 204, 255, 0.16), rgba(51, 204, 255, 0) 62%);
+    filter: blur(40px);
+    animation: glow-drift 20s ease-in-out infinite;
+  }
+  @keyframes glow-drift {
+    0%, 100% { transform: translate(-75%, 8%) scale(1); }
+    50%      { transform: translate(-25%, 65%) scale(1.3); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-bg-zone { transition: none; }
+    .scroll-bg-glow { animation: none; }
+  }
+</style>
+
+<script>
+  function initScrollBg() {
+    const zone = document.getElementById('scroll-bg-zone')
+    if (!zone) return
+    const sections = Array.from(zone.querySelectorAll<HTMLElement>('[data-bg]'))
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const color = (entry.target as HTMLElement).dataset.bg
+            if (color) zone.style.backgroundColor = color
+          }
+        })
+      },
+      // Dispara quando a seção cruza o centro da viewport.
+      { rootMargin: '-50% 0px -50% 0px', threshold: 0 },
+    )
+
+    sections.forEach((s) => observer.observe(s))
+  }
+
+  initScrollBg()
+  document.addEventListener('astro:page-load', initScrollBg)
+</script>

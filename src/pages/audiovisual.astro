@@ -1,0 +1,48 @@
+---
+export const prerender = true
+
+import { reader } from '../lib/reader'
+import { videoThumb } from '../lib/video'
+import ServicePageTemplate from '../components/ServicePageTemplate.astro'
+import VideoShowcase from '../components/VideoShowcase.astro'
+
+const page = await reader.collections.servicePages.read('audiovisual')
+if (!page) throw new Error('Conteúdo da página "audiovisual" não encontrado')
+
+const cases = (await reader.collections.cases.all())
+  .map((e) => ({ id: e.slug, ...e.entry }))
+  .filter((c) => c.service === 'Audiovisual')
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+
+// Mosaico do hero: thumbnails (YouTube) dos vídeos com link, intercalados.
+const galleries = cases.map((c) =>
+  (c.videos ?? []).map((v) => videoThumb(v.url)).filter(Boolean) as string[],
+)
+const heroMosaic: string[] = []
+const maxLen = Math.max(0, ...galleries.map((g) => g.length))
+for (let i = 0; i < maxLen; i++) {
+  for (const g of galleries) if (g[i]) heroMosaic.push(g[i])
+}
+const hasVideos = heroMosaic.length > 0
+---
+
+<ServicePageTemplate
+  seoTitle={page.seoTitle}
+  description={page.description}
+  eyebrow={page.eyebrow}
+  heroTitle={page.heroTitle}
+  heroSubtitle={page.heroSubtitle}
+  whatTitle={page.whatTitle}
+  whatBody={page.whatBody}
+  deliverables={page.deliverables}
+  forWhom={page.forWhom}
+  heroBgImages={heroMosaic}
+  heroCta={hasVideos ? { label: 'Ver as produções', href: '#producoes' } : undefined}
+>
+  <VideoShowcase
+    cases={cases}
+    eyebrow="Cases"
+    title="Produções por segmento"
+    description="Vídeos cinematográficos da Chronos para marcas de diferentes mercados."
+  />
+</ServicePageTemplate>

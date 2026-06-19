@@ -1,0 +1,32 @@
+---
+// Ícone decorativo flutuante com parallax sutil no scroll.
+// Camadas: wrapper recebe o transform do parallax (via JS),
+// a <img> interna recebe a animação de float em CSS — sem conflito de transform.
+interface Props {
+  src: string
+  /** classes de posicionamento + tamanho do wrapper (ex.: "right-[6%] top-[28%] w-32 sm:w-44") */
+  class?: string
+  /** variação do keyframe de float, pra dar ritmos diferentes entre ícones */
+  variant?: 'a' | 'b' | 'c'
+  /** fator de parallax (0 = parado, ~0.1-0.18 = sutil) */
+  speed?: number
+  /** opacidade do ícone (sutil: 0.15 - 0.3) */
+  opacity?: number
+}
+
+const { src, class: cls = '', variant = 'a', speed = 0.12, opacity = 0.22 } = Astro.props
+---
+
+<div
+  data-parallax={speed}
+  aria-hidden="true"
+  class={`pointer-events-none select-none absolute z-0 hidden sm:block ${cls}`}
+>
+  <img
+    src={src}
+    alt=""
+    loading="lazy"
+    class={`float-icon float-${variant} w-full h-auto`}
+    style={`opacity:${opacity}`}
+  />
+</div>

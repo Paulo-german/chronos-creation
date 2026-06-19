@@ -1,0 +1,48 @@
+---
+export const prerender = true
+
+import { reader, assetUrl } from '../lib/reader'
+import ServicePageTemplate from '../components/ServicePageTemplate.astro'
+import CaseGallery from '../components/CaseGallery.astro'
+
+const page = await reader.collections.servicePages.read('fotografia')
+if (!page) throw new Error('Conteúdo da página "fotografia" não encontrado')
+
+const cases = (await reader.collections.cases.all())
+  .map((e) => ({ id: e.slug, ...e.entry }))
+  .filter((c) => c.service === 'Fotografia')
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+
+// Mosaico de fundo do hero: intercala as fotos dos cases para variar.
+const galleries = cases.map((c) =>
+  (c.gallery ?? []).map((g) => assetUrl(g, '/portfolio/cases/')).filter(Boolean) as string[],
+)
+const heroMosaic: string[] = []
+const maxLen = Math.max(0, ...galleries.map((g) => g.length))
+for (let i = 0; i < maxLen; i++) {
+  for (const g of galleries) if (g[i]) heroMosaic.push(g[i])
+}
+---
+
+<ServicePageTemplate
+  seoTitle={page.seoTitle}
+  description={page.description}
+  eyebrow={page.eyebrow}
+  heroTitle={page.heroTitle}
+  heroSubtitle={page.heroSubtitle}
+  whatTitle={page.whatTitle}
+  whatBody={page.whatBody}
+  deliverables={page.deliverables}
+  forWhom={page.forWhom}
+  heroBgImages={heroMosaic}
+  heroCta={{ label: 'Ver os cases', href: '#cases' }}
+>
+  {cases.length > 0 && (
+    <CaseGallery
+      cases={cases}
+      eyebrow="Cases"
+      title="Ensaios que fizemos"
+      description="Seleção de trabalhos de fotografia da Chronos — gastronomia, ambientes e lifestyle."
+    />
+  )}
+</ServicePageTemplate>

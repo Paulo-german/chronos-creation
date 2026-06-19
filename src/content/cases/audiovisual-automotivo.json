@@ -1,0 +1,32 @@
+{
+  "title": "Automotivo",
+  "client": "",
+  "segment": "Automotivo",
+  "service": "Audiovisual",
+  "cover": null,
+  "description": "Vídeos para o universo automotivo — carros, eventos e serviços com produção de impacto.",
+  "gallery": [],
+  "videos": [
+    {
+      "title": "Cópia de Video",
+      "url": ""
+    },
+    {
+      "title": "encontro de carro",
+      "url": ""
+    },
+    {
+      "title": "Pauso Soldas-Oficial",
+      "url": ""
+    },
+    {
+      "title": "Só quem ama carro sabe o quanto momentos assim são espe…",
+      "url": ""
+    },
+    {
+      "title": "Worried your credit score is too low 🚫At Lifestyle Auto H…",
+      "url": ""
+    }
+  ],
+  "order": 9
+}

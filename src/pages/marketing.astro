@@ -1,0 +1,43 @@
+---
+export const prerender = true
+
+import { reader, assetUrl } from '../lib/reader'
+import ServicePageTemplate from '../components/ServicePageTemplate.astro'
+import PhotoGallery from '../components/PhotoGallery.astro'
+
+const page = await reader.collections.servicePages.read('marketing')
+if (!page) throw new Error('Conteúdo da página "marketing" não encontrado')
+
+const gallery = await reader.singletons.marketingGallery.read()
+const galleryImages = gallery?.images ?? []
+
+// Mosaico do hero a partir das fotos da galeria.
+const heroMosaic = galleryImages
+  .map((i) => assetUrl(i, '/portfolio/marketing/'))
+  .filter(Boolean) as string[]
+---
+
+<ServicePageTemplate
+  seoTitle={page.seoTitle}
+  description={page.description}
+  eyebrow={page.eyebrow}
+  heroTitle={page.heroTitle}
+  heroSubtitle={page.heroSubtitle}
+  whatTitle={page.whatTitle}
+  whatBody={page.whatBody}
+  deliverables={page.deliverables}
+  forWhom={page.forWhom}
+  heroBgImages={heroMosaic}
+  heroCta={galleryImages.length > 0 ? { label: 'Ver a equipe em ação', href: '#em-acao' } : undefined}
+>
+  {galleryImages.length > 0 && (
+    <div id="em-acao" class="scroll-mt-20">
+      <PhotoGallery
+        images={[...galleryImages]}
+        eyebrow={gallery?.eyebrow}
+        title={gallery?.title}
+        description={gallery?.description}
+      />
+    </div>
+  )}
+</ServicePageTemplate>

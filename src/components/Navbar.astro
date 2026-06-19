@@ -1,0 +1,68 @@
+---
+import { reader, assetUrl } from '../lib/reader'
+
+const settings = await reader.singletons.settings.read()
+const links = settings?.nav?.length
+  ? settings.nav
+  : [
+      { href: '/#sobre', label: 'Sobre' },
+      { href: '/#servicos', label: 'Soluções' },
+      { href: '/#portfolio', label: 'Portfólio' },
+    ]
+const logo = assetUrl(settings?.logo) ?? '/logo-white.png'
+---
+
+<header class="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-ink/70 border-b border-white/5">
+  <div class="max-w-8xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="/" aria-label="CHRONOS Creation — início">
+      <img
+        src={logo}
+        alt="CHRONOS Creation"
+        class="h-8 w-auto"
+        style="filter: drop-shadow(0 0 5px rgba(51,204,255,.30))"
+      />
+    </a>
+
+    <nav class="hidden sm:flex items-center gap-7">
+      {links.map(l => (
+        <a href={l.href} class="text-sm text-mut hover:text-white transition">{l.label}</a>
+      ))}
+      <a
+        href="/#contato"
+        class="ml-2 rounded-full border border-cyan/40 px-5 py-2 text-sm font-semibold text-cyan hover:bg-cyan/10 transition"
+      >
+        Contato
+      </a>
+    </nav>
+
+    <button id="nav-toggle" class="sm:hidden text-mut hover:text-white transition" aria-label="Abrir menu">
+      <svg id="icon-menu" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+      <svg id="icon-close" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <nav id="nav-mobile" class="hidden sm:hidden border-t border-white/5 bg-ink/95 px-5 py-4 flex-col gap-4">
+    {links.map(l => (
+      <a href={l.href} class="text-sm text-mut hover:text-white transition">{l.label}</a>
+    ))}
+    <a href="/#contato" class="text-sm font-semibold text-cyan hover:text-cyan-bright transition">Contato</a>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle')
+  const mobile = document.getElementById('nav-mobile')
+  const iconMenu = document.getElementById('icon-menu')
+  const iconClose = document.getElementById('icon-close')
+
+  toggle?.addEventListener('click', () => {
+    const open = mobile?.classList.toggle('hidden') === false
+    mobile?.classList.toggle('flex', open)
+    iconMenu?.classList.toggle('hidden', open)
+    iconClose?.classList.toggle('hidden', !open)
+  })
+</script>

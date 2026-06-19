@@ -1,0 +1,250 @@
+---
+import { assetUrl } from '../lib/reader'
+import { videoEmbedUrl } from '../lib/video'
+
+interface Project {
+  id: string
+  title: string
+  client?: string | null
+  category?: string | null
+  cover?: string | null
+  videoUrl?: string | null
+  description?: string | null
+  year?: string | null
+  /** link externo/interno (ex.: case de branding) quando não há vídeo */
+  href?: string | null
+}
+
+interface Props {
+  projects: Project[]
+  showFilters?: boolean
+}
+
+const { projects, showFilters = true } = Astro.props
+
+// Categorias presentes (para os botões de filtro), preservando a ordem de aparição.
+const categories = [...new Set(projects.map((p) => p.category).filter(Boolean))] as string[]
+---
+
+<div class="project-showcase">
+  {showFilters && categories.length > 1 && (
+    <div class="flex flex-wrap gap-2.5 mb-12" role="group" aria-label="Filtrar projetos por categoria">
+      <button
+        type="button"
+        class="filter-btn is-active rounded-full border border-white/15 px-5 py-2 text-xs font-semibold uppercase tracking-wide transition"
+        data-filter="all"
+        aria-pressed="true"
+      >
+        Todos
+      </button>
+      {categories.map((c) => (
+        <button
+          type="button"
+          class="filter-btn rounded-full border border-white/15 px-5 py-2 text-xs font-semibold uppercase tracking-wide transition"
+          data-filter={c}
+          aria-pressed="false"
+        >
+          {c}
+        </button>
+      ))}
+    </div>
+  )}
+
+  <div class="showcase-rows flex flex-col gap-6 sm:gap-8">
+    {projects.map((p) => {
+      const embed = videoEmbedUrl(p.videoUrl)
+      const cover = assetUrl(p.cover, '/portfolio/')
+      return (
+        <article
+          class="project-row group grid sm:grid-cols-2 gap-6 sm:gap-10 items-center"
+          data-category={p.category ?? ''}
+        >
+          {/* Mídia */}
+          <div class="row-media ph relative rounded-2xl overflow-hidden min-h-[300px] sm:min-h-[420px] border border-white/5">
+            {cover && (
+              <img
+                src={cover}
+                alt={p.title}
+                class="absolute inset-0 w-full h-full object-cover"
+                loading="lazy"
+              />
+            )}
+            {embed && (
+              <button
+                type="button"
+                class="video-trigger absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/40 transition"
+                data-video={embed}
+                data-title={p.title}
+                aria-label={`Assistir: ${p.title}`}
+              >
+                <span class="flex items-center justify-center w-16 h-16 rounded-full bg-cyan/90 text-ink group-hover:scale-110 transition-transform">
+                  <svg class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+              </button>
+            )}
+            {!embed && p.href && (
+              <a
+                href={p.href}
+                class="absolute inset-0 flex items-center justify-center bg-black/10 hover:bg-black/35 transition"
+                aria-label={`Ver case: ${p.title}`}
+              >
+                <span class="flex items-center justify-center w-16 h-16 rounded-full bg-cyan/90 text-ink group-hover:scale-110 transition-transform">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </span>
+              </a>
+            )}
+          </div>
+
+          {/* Texto */}
+          <div class="row-info">
+            {p.category && (
+              <p class="eyebrow text-xs font-semibold uppercase text-cyan mb-3">{p.category}</p>
+            )}
+            <h3 class="text-2xl sm:text-3xl font-extrabold leading-tight">{p.title}</h3>
+            {(p.client || p.year) && (
+              <p class="mt-2 text-xs font-semibold uppercase tracking-widest text-white/50">
+                {[p.client, p.year].filter(Boolean).join(' · ')}
+              </p>
+            )}
+            {p.description && (
+              <p class="mt-4 text-sm text-mut leading-relaxed max-w-md">{p.description}</p>
+            )}
+            {embed && (
+              <button
+                type="button"
+                class="video-trigger mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan hover:gap-3 transition-all"
+                data-video={embed}
+                data-title={p.title}
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                Assistir
+              </button>
+            )}
+            {!embed && p.href && (
+              <a
+                href={p.href}
+                class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan hover:gap-3 transition-all"
+              >
+                Ver case
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            )}
+          </div>
+        </article>
+      )
+    })}
+  </div>
+
+  {/* Modal de vídeo */}
+  <div
+    class="video-modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/85 p-4 sm:p-8"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Player de vídeo"
+  >
+    <button
+      type="button"
+      class="modal-close absolute top-5 right-5 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition"
+      aria-label="Fechar vídeo"
+    >
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="w-full max-w-5xl aspect-video">
+      <iframe
+        class="modal-frame w-full h-full rounded-xl"
+        src="about:blank"
+        title="Player de vídeo"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<style>
+  .filter-btn.is-active {
+    background-color: var(--color-cyan);
+    border-color: var(--color-cyan);
+    color: var(--color-ink);
+  }
+  /* Alterna o lado da mídia nas faixas visíveis (desktop). */
+  @media (min-width: 640px) {
+    .project-row.reverse .row-media { order: 2; }
+    .project-row.reverse .row-info { order: 1; }
+  }
+</style>
+
+<script>
+  function initShowcase() {
+    document.querySelectorAll<HTMLElement>('.project-showcase').forEach((root) => {
+      const rows = Array.from(root.querySelectorAll<HTMLElement>('.project-row'))
+      const filterBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('.filter-btn'))
+      const modal = root.querySelector<HTMLElement>('.video-modal')
+      const frame = root.querySelector<HTMLIFrameElement>('.modal-frame')
+      const closeBtn = root.querySelector<HTMLButtonElement>('.modal-close')
+
+      // Aplica alternância de lado apenas às faixas visíveis.
+      const relayout = () => {
+        let visible = 0
+        rows.forEach((row) => {
+          if (row.style.display === 'none') return
+          row.classList.toggle('reverse', visible % 2 === 1)
+          visible++
+        })
+      }
+
+      // Filtros
+      filterBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const filter = btn.dataset.filter
+          filterBtns.forEach((b) => {
+            const active = b === btn
+            b.classList.toggle('is-active', active)
+            b.setAttribute('aria-pressed', String(active))
+          })
+          rows.forEach((row) => {
+            const show = filter === 'all' || row.dataset.category === filter
+            row.style.display = show ? '' : 'none'
+          })
+          relayout()
+        })
+      })
+
+      // Modal de vídeo
+      const open = (src: string) => {
+        if (!modal || !frame) return
+        frame.src = src
+        modal.classList.remove('hidden')
+        modal.classList.add('flex')
+        document.body.style.overflow = 'hidden'
+      }
+      const close = () => {
+        if (!modal || !frame) return
+        modal.classList.add('hidden')
+        modal.classList.remove('flex')
+        frame.src = 'about:blank'
+        document.body.style.overflow = ''
+      }
+
+      root.querySelectorAll<HTMLElement>('.video-trigger').forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+          const src = trigger.dataset.video
+          if (src) open(src)
+        })
+      })
+
+      closeBtn?.addEventListener('click', close)
+      modal?.addEventListener('click', (e) => {
+        if (e.target === modal) close()
+      })
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) close()
+      })
+
+      relayout()
+    })
+  }
+
+  initShowcase()
+  document.addEventListener('astro:page-load', initShowcase)
+</script>

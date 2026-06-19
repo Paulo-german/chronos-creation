@@ -1,0 +1,21 @@
+{
+  "title": "Zebra Beach Resort",
+  "client": "Zebra Beach Resort",
+  "segment": "Hotelaria",
+  "service": "Fotografia",
+  "cover": "zebra-beach-resort-01.jpg",
+  "description": "Ensaio fotográfico de hotelaria e lifestyle, valorizando estrutura, ambientes e a experiência do hóspede.",
+  "gallery": [
+    "zebra-beach-resort-01.jpg",
+    "zebra-beach-resort-02.jpg",
+    "zebra-beach-resort-03.jpg",
+    "zebra-beach-resort-04.jpg",
+    "zebra-beach-resort-05.jpg",
+    "zebra-beach-resort-06.jpg",
+    "zebra-beach-resort-07.jpg",
+    "zebra-beach-resort-08.jpg",
+    "zebra-beach-resort-09.jpg",
+    "zebra-beach-resort-10.jpg"
+  ],
+  "order": 9
+}

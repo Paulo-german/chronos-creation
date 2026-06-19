@@ -1,0 +1,22 @@
+{
+  "title": "Tora Sushi",
+  "client": "Tora Sushi",
+  "segment": "Gastronomia",
+  "service": "Fotografia",
+  "cover": "tora-sushi-01.jpg",
+  "description": "Ensaio fotográfico gastronômico — pratos, ambiente e experiência capturados para fortalecer a percepção da marca.",
+  "gallery": [
+    "tora-sushi-01.jpg",
+    "tora-sushi-02.jpg",
+    "tora-sushi-03.jpg",
+    "tora-sushi-04.jpg",
+    "tora-sushi-05.jpg",
+    "tora-sushi-06.jpg",
+    "tora-sushi-07.jpg",
+    "tora-sushi-08.jpg",
+    "tora-sushi-09.jpg",
+    "tora-sushi-10.jpg",
+    "tora-sushi-11.jpg"
+  ],
+  "order": 7
+}

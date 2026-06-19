@@ -1,0 +1,44 @@
+---
+import { reader, assetUrl } from '../lib/reader'
+import FloatingIcon from './FloatingIcon.astro'
+
+const entries = await reader.collections.projects.all()
+const projects = entries
+  .map(e => ({ id: e.slug, ...e.entry }))
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+
+const home = await reader.singletons.home.read()
+const h = home?.portfolioHeader
+---
+
+<section id="portfolio" class="relative overflow-hidden py-24 sm:py-28">
+  <FloatingIcon src="/icones/drone.png" class="-right-[2%] top-[12%] w-[224px] lg:w-[352px]" variant="b" speed={0.17} opacity={0.34} />
+  <div class="max-w-8xl mx-auto px-5 sm:px-8 relative z-10">
+    <div data-reveal class="reveal">
+      <p class="eyebrow text-xs font-semibold uppercase text-cyan mb-3">{h?.eyebrow}</p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold" set:html={h?.title} />
+      <p class="mt-2 text-mut max-w-xl">{h?.description}</p>
+    </div>
+
+    <div class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {projects.map(p => (
+        <div
+          data-reveal
+          class={`reveal ph rounded-2xl ${p.gridClass} ${p.minHeight ?? ''} aspect-[4/3] sm:aspect-auto flex items-end p-5 border border-white/5 relative`}
+        >
+          {p.cover && (
+            <img src={assetUrl(p.cover, '/portfolio/')} alt={p.title} class="absolute inset-0 w-full h-full object-cover rounded-2xl" loading="lazy" />
+          )}
+          <span class="text-xs font-semibold uppercase tracking-widest text-white/60 relative z-10">{p.title}</span>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 flex justify-center">
+      <a href="/projetos" class="inline-flex items-center gap-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-3 text-sm font-semibold transition">
+        Ver todos os projetos
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>

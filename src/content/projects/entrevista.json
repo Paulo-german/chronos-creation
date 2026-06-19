@@ -1,0 +1,12 @@
+{
+  "title": "Entrevista",
+  "client": "Cliente",
+  "category": "Audiovisual",
+  "cover": "marketing/marketing-02.jpg",
+  "videoUrl": null,
+  "description": "Entrevista em vídeo com enquadramento profissional, usada em campanha de conteúdo e autoridade.",
+  "year": "2024",
+  "gridClass": "sm:col-span-2",
+  "minHeight": "min-h-[200px]",
+  "order": 5
+}

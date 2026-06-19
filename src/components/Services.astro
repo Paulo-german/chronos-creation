@@ -1,0 +1,25 @@
+---
+import { reader } from '../lib/reader'
+import ServiceCard from './ServiceCard.astro'
+
+const entries = await reader.collections.services.all()
+const services = entries
+  .map(e => ({ slug: e.entry.href, ...e.entry }))
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+
+const home = await reader.singletons.home.read()
+const h = home?.servicesHeader
+---
+
+<section id="servicos" class="bg-panel py-24 sm:py-28 border-y border-white/5">
+  <div class="max-w-8xl mx-auto px-5 sm:px-8">
+    <div data-reveal class="reveal">
+      <p class="eyebrow text-xs font-semibold uppercase text-cyan mb-3">{h?.eyebrow}</p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold">{h?.title}</h2>
+    </div>
+
+    <div class="mt-12 grid md:grid-cols-3 gap-5">
+      {services.map(s => <ServiceCard {...s} />)}
+    </div>
+  </div>
+</section>

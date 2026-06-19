@@ -1,0 +1,12 @@
+{
+  "title": "Projeto em destaque",
+  "client": "Cliente",
+  "category": "Audiovisual",
+  "cover": "cases/chima-steak-house-02.jpg",
+  "videoUrl": null,
+  "description": "Case principal da produtora — substitua por um vídeo real, a capa e a descrição do projeto que melhor representa o trabalho.",
+  "year": "2025",
+  "gridClass": "sm:col-span-2 sm:row-span-2",
+  "minHeight": "sm:min-h-[420px]",
+  "order": 1
+}

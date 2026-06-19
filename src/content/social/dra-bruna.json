@@ -1,0 +1,58 @@
+{
+  "title": "Dra. Bruna",
+  "client": "Dra. Bruna",
+  "segment": "Saúde",
+  "handle": "@drabruna",
+  "cover": "dra-bruna-i01.jpg",
+  "order": 2,
+  "posts": [
+    {
+      "type": "video",
+      "image": null,
+      "video": "dra-bruna-v01.mp4",
+      "poster": "dra-bruna-v01.jpg"
+    },
+    {
+      "type": "video",
+      "image": null,
+      "video": "dra-bruna-v02.mp4",
+      "poster": "dra-bruna-v02.jpg"
+    },
+    {
+      "type": "image",
+      "image": "dra-bruna-i01.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "dra-bruna-i02.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "dra-bruna-i03.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "dra-bruna-i04.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "dra-bruna-i05.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "dra-bruna-i06.jpg",
+      "video": null,
+      "poster": null
+    }
+  ]
+}

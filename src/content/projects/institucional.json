@@ -1,0 +1,12 @@
+{
+  "title": "Institucional",
+  "client": "Cliente",
+  "category": "Audiovisual",
+  "cover": "cases/brazilian-body-01.jpg",
+  "videoUrl": null,
+  "description": "Vídeo institucional para apresentar a marca, seus valores e seu posicionamento ao público.",
+  "year": "2025",
+  "gridClass": "",
+  "minHeight": "min-h-[200px]",
+  "order": 3
+}

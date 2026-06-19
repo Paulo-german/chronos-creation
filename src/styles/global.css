@@ -1,0 +1,110 @@
+@import '@fontsource/montserrat/400.css';
+@import '@fontsource/montserrat/500.css';
+@import '@fontsource/montserrat/600.css';
+@import '@fontsource/montserrat/700.css';
+@import '@fontsource/montserrat/800.css';
+@import '@fontsource/montserrat/900.css';
+
+@import "tailwindcss";
+
+@theme {
+  --color-ink:        #181818;
+  --color-panel:      #202020;
+  --color-card:       #242424;
+  --color-line:       #343434;
+  --color-mut:        #9b9b9b;
+  --color-cyan:       #33ccff;
+  --color-cyan-bright:#5cd8ff;
+  --color-cyan-soft:  #9fe6ff;
+  --color-navy:       #05476b;
+  --color-navy-mid:   #1974a6;
+  --color-navy-deep:  #062f47;
+
+  --font-sans: 'Montserrat', system-ui, sans-serif;
+
+  /* Container do conteúdo: 1440px (entre o 7xl=1280 e o 2xl=1536) */
+  --container-8xl: 90rem;
+}
+
+html { scroll-behavior: smooth; }
+body { background: #181818; color: #f4f4f4; -webkit-font-smoothing: antialiased; }
+
+.aura {
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(51,204,255,.42) 0%, rgba(25,116,166,.26) 26%, rgba(24,24,24,0) 60%),
+    linear-gradient(180deg, #062f47 0%, #181818 58%);
+}
+
+.band { background: linear-gradient(135deg, #05476b 0%, #126a99 60%, #1974a6 100%); }
+
+/* Degradê escuro da seção Sobre — azul mais escuro da paleta indo ao quase-preto */
+.band-deep { background: linear-gradient(160deg, #05476b 0%, #202020 92%); }
+
+.eyebrow { letter-spacing: 0.22em; }
+
+.glow { text-shadow: 0 0 14px rgba(51,204,255,.55), 0 0 4px rgba(51,204,255,.7); }
+
+.ph {
+  background:
+    linear-gradient(135deg, rgba(25,116,166,.22), rgba(36,36,36,.6)),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.02) 0 12px, rgba(255,255,255,0) 12px 24px);
+}
+
+.marquee { animation: scroll-x 28s linear infinite; }
+
+@keyframes scroll-x {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Ícones flutuantes decorativos — float em CSS (parallax fica no wrapper, via JS) */
+.float-icon { will-change: transform; }
+.float-a { animation: float-a 7s ease-in-out infinite; }
+.float-b { animation: float-b 9s ease-in-out infinite; }
+.float-c { animation: float-c 6s ease-in-out infinite; }
+
+@keyframes float-a {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-16px) rotate(3deg); }
+}
+@keyframes float-b {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-24px) rotate(-4deg); }
+}
+@keyframes float-c {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+
+.scroll-drip {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%);
+  animation: drip 2.4s ease-in-out infinite;
+}
+
+@keyframes drip {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateY(200%); opacity: 0; }
+}
+
+*:focus-visible { outline: 2px solid #33ccff; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .marquee { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .float-icon { animation: none; }
+}

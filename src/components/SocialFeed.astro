@@ -1,0 +1,277 @@
+---
+import { assetUrl } from '../lib/reader'
+
+interface Post {
+  type: string
+  image?: string | null
+  video?: string | null
+  poster?: string | null
+}
+interface Account {
+  id: string
+  title: string
+  client?: string | null
+  segment?: string | null
+  handle?: string | null
+  cover?: string | null
+  posts?: Post[]
+}
+interface Props {
+  accounts: Account[]
+  eyebrow?: string
+  title?: string
+  description?: string
+}
+
+const { accounts, eyebrow = 'Redes sociais', title = 'Contas que gerenciamos', description } = Astro.props
+
+// Dados resolvidos (URLs públicas) entregues ao script do feed.
+const data = accounts.map((a) => ({
+  title: a.title,
+  handle: a.handle ?? '',
+  segment: a.segment ?? '',
+  posts: (a.posts ?? [])
+    .map((p) => ({
+      type: p.type,
+      src:
+        p.type === 'video'
+          ? assetUrl(p.video, '/portfolio/social/')
+          : assetUrl(p.image, '/portfolio/social/'),
+      poster: assetUrl(p.poster, '/portfolio/social/'),
+    }))
+    .filter((p) => p.src),
+}))
+---
+
+<section id="contas" class="bg-panel border-y border-white/5 py-20 sm:py-24 scroll-mt-20">
+  <div class="max-w-8xl mx-auto px-5 sm:px-8">
+    <div data-reveal class="reveal mb-12">
+      <p class="eyebrow text-xs font-semibold uppercase text-cyan mb-3">{eyebrow}</p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold">{title}</h2>
+      {description && <p class="mt-2 text-mut max-w-xl">{description}</p>}
+    </div>
+
+    <div class="social-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+      {accounts.map((a, i) => {
+        const cover = assetUrl(a.cover, '/portfolio/social/')
+        const count = (a.posts ?? []).length
+        const reels = (a.posts ?? []).filter((p) => p.type === 'video').length
+        return (
+          <button
+            type="button"
+            class="social-card group rounded-2xl bg-card border border-line p-6 text-center hover:border-cyan/50 transition"
+            data-index={i}
+            aria-label={`Ver feed: ${a.title}`}
+          >
+            <span class="block w-20 h-20 mx-auto rounded-full overflow-hidden border border-white/10 ph relative">
+              {cover && <img src={cover} alt={a.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform" loading="lazy" />}
+              <span class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+              </span>
+            </span>
+            <span class="block mt-4 font-bold leading-tight">{a.title}</span>
+            {a.handle && <span class="block text-xs text-cyan-soft mt-0.5">{a.handle}</span>}
+            {a.segment && <span class="block text-[11px] font-semibold uppercase tracking-widest text-mut mt-2">{a.segment}</span>}
+            <span class="block text-xs text-mut mt-3">{count} posts · {reels} reels</span>
+            <span class="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-cyan group-hover:gap-2.5 transition-all">
+              Ver trabalho
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </button>
+        )
+      })}
+    </div>
+  </div>
+
+  {/* Modal: feed da conta */}
+  <div class="social-modal fixed inset-0 z-[100] hidden flex-col bg-ink/95" role="dialog" aria-modal="true" aria-label="Feed da conta">
+    <div class="flex items-center gap-4 px-5 sm:px-8 h-16 border-b border-white/10 shrink-0">
+      <span class="sm-title font-bold"></span>
+      <span class="sm-handle text-xs text-cyan-soft"></span>
+      <button type="button" class="sm-close ml-auto flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Fechar">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="sm-feed grid grid-cols-3 gap-1 overflow-y-auto p-1 max-w-3xl w-full mx-auto"></div>
+  </div>
+
+  {/* Viewer: post em destaque (imagem ou reel) */}
+  <div class="post-viewer fixed inset-0 z-[110] hidden items-center justify-center bg-black/92 p-4" role="dialog" aria-modal="true" aria-label="Post">
+    <button type="button" class="pv-close absolute top-5 right-5 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Fechar">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <button type="button" class="pv-prev absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Anterior">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button type="button" class="pv-next absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Próximo">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <div class="pv-media max-h-[88vh] flex items-center justify-center"></div>
+  </div>
+
+  <script is:inline set:html={`window.__socialData = ${JSON.stringify(data)};`}></script>
+</section>
+
+<script>
+  function initSocialFeed() {
+    const root = document.querySelector<HTMLElement>('.social-grid')?.closest('section')
+    if (!root) return
+    const accounts = (window as any).__socialData as Array<{
+      title: string; handle: string; segment: string
+      posts: Array<{ type: string; src: string; poster: string | null }>
+    }>
+    if (!accounts) return
+
+    const modal = root.querySelector<HTMLElement>('.social-modal')
+    const smTitle = root.querySelector<HTMLElement>('.sm-title')
+    const smHandle = root.querySelector<HTMLElement>('.sm-handle')
+    const smFeed = root.querySelector<HTMLElement>('.sm-feed')
+    const viewer = root.querySelector<HTMLElement>('.post-viewer')
+    const pvMedia = root.querySelector<HTMLElement>('.pv-media')
+    if (!modal || !smTitle || !smHandle || !smFeed || !viewer || !pvMedia) return
+
+    let acc = 0
+    let post = 0
+
+    const playSvg =
+      '<span class="absolute top-2 right-2 flex items-center justify-center w-7 h-7 rounded-full bg-black/45"><svg class="w-3.5 h-3.5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>'
+    const volOff =
+      '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>'
+    const volOn =
+      '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>'
+    const pauseSvg =
+      '<svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>'
+
+    const openFeed = (i: number) => {
+      acc = i
+      const a = accounts[i]
+      smTitle.textContent = a.title
+      smHandle.textContent = a.handle
+      smFeed.innerHTML = ''
+      a.posts.forEach((p, idx) => {
+        const cell = document.createElement('button')
+        cell.type = 'button'
+        cell.className = 'relative aspect-square overflow-hidden bg-card group'
+        const thumb = p.type === 'video' ? p.poster : p.src
+        cell.innerHTML =
+          (thumb ? `<img src="${thumb}" loading="lazy" class="w-full h-full object-cover group-hover:opacity-80 transition" />` : '') +
+          (p.type === 'video' ? playSvg : '')
+        cell.addEventListener('click', () => openViewer(idx))
+        smFeed.appendChild(cell)
+      })
+      modal.classList.remove('hidden')
+      modal.classList.add('flex')
+      document.body.style.overflow = 'hidden'
+    }
+    const closeFeed = () => {
+      modal.classList.add('hidden')
+      modal.classList.remove('flex')
+      document.body.style.overflow = ''
+    }
+
+    const renderPost = () => {
+      const a = accounts[acc]
+      post = (post + a.posts.length) % a.posts.length
+      const p = a.posts[post]
+      pvMedia.innerHTML = ''
+      if (p.type === 'video') {
+        const wrap = document.createElement('div')
+        wrap.className = 'relative inline-block'
+
+        const v = document.createElement('video')
+        v.src = p.src
+        if (p.poster) v.poster = p.poster
+        v.autoplay = true
+        v.muted = true
+        v.loop = true
+        v.playsInline = true
+        v.className = 'block max-h-[88vh] w-auto rounded-xl bg-black cursor-pointer'
+        wrap.appendChild(v)
+
+        // barra de progresso sutil
+        const track = document.createElement('div')
+        track.className = 'absolute left-0 right-0 bottom-0 h-1 bg-white/15 rounded-b-xl overflow-hidden'
+        const bar = document.createElement('div')
+        bar.className = 'h-full bg-cyan'
+        bar.style.width = '0%'
+        track.appendChild(bar)
+        wrap.appendChild(track)
+        v.addEventListener('timeupdate', () => {
+          bar.style.width = (v.currentTime / (v.duration || 1)) * 100 + '%'
+        })
+
+        // ícone central de play quando pausado
+        const playOverlay = document.createElement('div')
+        playOverlay.className =
+          'absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition'
+        playOverlay.innerHTML =
+          '<span class="flex items-center justify-center w-16 h-16 rounded-full bg-black/45">' + pauseSvg + '</span>'
+        wrap.appendChild(playOverlay)
+
+        // botão de áudio (começa mudo)
+        const mute = document.createElement('button')
+        mute.type = 'button'
+        mute.className =
+          'absolute bottom-3 right-3 flex items-center justify-center w-10 h-10 rounded-full bg-black/55 hover:bg-black/75 text-white transition'
+        mute.innerHTML = volOff
+        mute.setAttribute('aria-label', 'Ativar som')
+        mute.addEventListener('click', (e) => {
+          e.stopPropagation()
+          v.muted = !v.muted
+          mute.innerHTML = v.muted ? volOff : volOn
+          mute.setAttribute('aria-label', v.muted ? 'Ativar som' : 'Desativar som')
+        })
+        wrap.appendChild(mute)
+
+        // tocar/pausar ao clicar no vídeo
+        v.addEventListener('click', () => {
+          if (v.paused) v.play()
+          else v.pause()
+        })
+        v.addEventListener('play', () => (playOverlay.style.opacity = '0'))
+        v.addEventListener('pause', () => (playOverlay.style.opacity = '1'))
+
+        pvMedia.appendChild(wrap)
+        v.play?.().catch(() => {})
+      } else {
+        const img = document.createElement('img')
+        img.src = p.src
+        img.className = 'max-h-[88vh] w-auto object-contain rounded-xl'
+        pvMedia.appendChild(img)
+      }
+    }
+    const openViewer = (idx: number) => {
+      post = idx
+      renderPost()
+      viewer.classList.remove('hidden')
+      viewer.classList.add('flex')
+    }
+    const closeViewer = () => {
+      viewer.classList.add('hidden')
+      viewer.classList.remove('flex')
+      pvMedia.innerHTML = ''
+    }
+    const move = (d: number) => { post += d; renderPost() }
+
+    root.querySelectorAll<HTMLElement>('.social-card').forEach((card) => {
+      card.addEventListener('click', () => openFeed(Number(card.dataset.index)))
+    })
+    root.querySelector('.sm-close')?.addEventListener('click', closeFeed)
+    root.querySelector('.pv-close')?.addEventListener('click', closeViewer)
+    root.querySelector('.pv-prev')?.addEventListener('click', () => move(-1))
+    root.querySelector('.pv-next')?.addEventListener('click', () => move(1))
+    viewer.addEventListener('click', (e) => { if (e.target === viewer) closeViewer() })
+    document.addEventListener('keydown', (e) => {
+      if (!viewer.classList.contains('hidden')) {
+        if (e.key === 'Escape') closeViewer()
+        if (e.key === 'ArrowLeft') move(-1)
+        if (e.key === 'ArrowRight') move(1)
+      } else if (!modal.classList.contains('hidden') && e.key === 'Escape') {
+        closeFeed()
+      }
+    })
+  }
+
+  initSocialFeed()
+  document.addEventListener('astro:page-load', initSocialFeed)
+</script>

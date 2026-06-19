@@ -1,0 +1,12 @@
+{
+  "title": "Podcast",
+  "client": "Cliente",
+  "category": "Audiovisual",
+  "cover": "marketing/marketing-01.jpg",
+  "videoUrl": null,
+  "description": "Captação e edição de episódios de podcast em estúdio, com cortes verticais para redes sociais.",
+  "year": "2025",
+  "gridClass": "",
+  "minHeight": "min-h-[200px]",
+  "order": 2
+}

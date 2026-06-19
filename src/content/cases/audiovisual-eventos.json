@@ -1,0 +1,56 @@
+{
+  "title": "Eventos",
+  "client": "",
+  "segment": "Eventos",
+  "service": "Audiovisual",
+  "cover": null,
+  "description": "Cobertura audiovisual de eventos — energia, público e os melhores momentos com qualidade cinematográfica.",
+  "gallery": [],
+  "videos": [
+    {
+      "title": "Brazilian Way 2806",
+      "url": ""
+    },
+    {
+      "title": "Brazilian Way",
+      "url": ""
+    },
+    {
+      "title": "Charlotte Video Agency",
+      "url": ""
+    },
+    {
+      "title": "Construction Dia 1 Horizontal",
+      "url": ""
+    },
+    {
+      "title": "Domingo CC",
+      "url": ""
+    },
+    {
+      "title": "Italian Festival Day 1",
+      "url": ""
+    },
+    {
+      "title": "Italian Festival Day 2",
+      "url": ""
+    },
+    {
+      "title": "Italian Festival Day 3",
+      "url": ""
+    },
+    {
+      "title": "Luryx-ReelsConvidados",
+      "url": ""
+    },
+    {
+      "title": "Luryx",
+      "url": ""
+    },
+    {
+      "title": "O Arabe",
+      "url": ""
+    }
+  ],
+  "order": 6
+}

@@ -1,0 +1,32 @@
+---
+import { reader } from '../lib/reader'
+import FloatingIcon from './FloatingIcon.astro'
+
+const home = await reader.singletons.home.read()
+const about = home?.about
+const paragraphs = about?.paragraphs ?? []
+---
+
+<section id="sobre" class="band-deep relative overflow-hidden py-24 sm:py-28">
+  <FloatingIcon src="/icones/camera.png" class="-left-[9%] -bottom-[6%] w-[336px] lg:w-[480px]" variant="c" speed={0.13} opacity={0.25} />
+  <div class="max-w-8xl mx-auto px-5 sm:px-8 grid md:grid-cols-2 gap-12 items-center relative z-10">
+    <div data-reveal class="reveal">
+      <p class="eyebrow text-xs font-semibold uppercase text-cyan-soft mb-4">Sobre</p>
+      <h2 class="text-2xl sm:text-4xl font-extrabold leading-tight">
+        {about?.title}
+      </h2>
+      {paragraphs.map((p, i) => (
+        <p class={`${i === 0 ? 'mt-6' : 'mt-4'} text-white/80 leading-relaxed`}>{p}</p>
+      ))}
+      <a href="/#contato" class="mt-7 inline-flex items-center gap-1.5 text-sm font-semibold text-cyan-soft hover:gap-2.5 transition-all">
+        {about?.ctaLabel}
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+
+    <!-- TODO: substituir pelo placeholder pela foto real de bastidores -->
+    <div data-reveal class="reveal ph rounded-2xl min-h-[340px] border border-white/10 flex items-end p-5">
+      <span class="text-xs font-semibold uppercase tracking-widest text-white/60">Bastidores</span>
+    </div>
+  </div>
+</section>

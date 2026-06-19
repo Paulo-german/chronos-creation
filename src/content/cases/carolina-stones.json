@@ -1,0 +1,18 @@
+{
+  "title": "Carolina Stones",
+  "client": "Carolina Stones",
+  "segment": "Ensaio",
+  "service": "Fotografia",
+  "cover": "carolina-stones-01.jpg",
+  "description": "Ensaio fotográfico de retrato e lifestyle, com direção de luz e composição.",
+  "gallery": [
+    "carolina-stones-01.jpg",
+    "carolina-stones-02.jpg",
+    "carolina-stones-03.jpg",
+    "carolina-stones-04.jpg",
+    "carolina-stones-05.jpg",
+    "carolina-stones-06.jpg",
+    "carolina-stones-07.jpg"
+  ],
+  "order": 2
+}

@@ -1,0 +1,76 @@
+{
+  "title": "Tropical Bakery",
+  "client": "Tropical Bakery",
+  "segment": "Gastronomia",
+  "handle": "@tropicalbakery",
+  "cover": "tropical-bakery-i01.jpg",
+  "order": 7,
+  "posts": [
+    {
+      "type": "video",
+      "image": null,
+      "video": "tropical-bakery-v01.mp4",
+      "poster": "tropical-bakery-v01.jpg"
+    },
+    {
+      "type": "video",
+      "image": null,
+      "video": "tropical-bakery-v02.mp4",
+      "poster": "tropical-bakery-v02.jpg"
+    },
+    {
+      "type": "image",
+      "image": "tropical-bakery-i01.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "tropical-bakery-i02.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "tropical-bakery-i03.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "tropical-bakery-i04.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "tropical-bakery-i05.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "tropical-bakery-i06.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "tropical-bakery-i07.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "tropical-bakery-i08.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "tropical-bakery-i09.jpg",
+      "video": null,
+      "poster": null
+    }
+  ]
+}

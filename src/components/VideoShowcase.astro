@@ -1,0 +1,162 @@
+---
+import { assetUrl } from '../lib/reader'
+import { videoEmbedUrl, videoThumb } from '../lib/video'
+
+interface Video {
+  title?: string | null
+  url?: string | null
+}
+interface Case {
+  id: string
+  title: string
+  segment?: string | null
+  cover?: string | null
+  description?: string | null
+  videos?: Video[]
+}
+interface Props {
+  cases: Case[]
+  eyebrow?: string
+  title?: string
+  description?: string
+}
+
+const { cases, eyebrow = 'Cases', title = 'Produções', description } = Astro.props
+
+// Só cases com pelo menos um vídeo com link válido.
+const data = cases
+  .map((c) => ({
+    title: c.title,
+    segment: c.segment ?? '',
+    cover: assetUrl(c.cover, '/portfolio/cases/'),
+    videos: (c.videos ?? [])
+      .map((v) => ({ title: v.title ?? '', embed: videoEmbedUrl(v.url), thumb: videoThumb(v.url) }))
+      .filter((v) => v.embed),
+  }))
+  .filter((c) => c.videos.length > 0)
+---
+
+{data.length > 0 && (
+  <section id="producoes" class="bg-panel border-y border-white/5 py-20 sm:py-24 scroll-mt-20">
+    <div class="max-w-8xl mx-auto px-5 sm:px-8">
+      <div data-reveal class="reveal mb-12">
+        <p class="eyebrow text-xs font-semibold uppercase text-cyan mb-3">{eyebrow}</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold">{title}</h2>
+        {description && <p class="mt-2 text-mut max-w-xl">{description}</p>}
+      </div>
+
+      <div class="vs-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {data.map((c, i) => {
+          const thumb = c.cover || c.videos[0].thumb
+          return (
+            <button type="button" class="vs-card group relative rounded-2xl overflow-hidden aspect-video border border-white/5 ph text-left" data-index={i} aria-label={`Ver produções: ${c.title}`}>
+              {thumb && <img src={thumb} alt={c.title} class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />}
+              <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent"></div>
+              <div class="absolute inset-x-0 bottom-0 p-6 flex items-end justify-between gap-4">
+                <div>
+                  <span class="block text-[11px] font-semibold uppercase tracking-widest text-cyan-soft mb-1">{c.videos.length} vídeos</span>
+                  <span class="block text-lg font-extrabold leading-tight">{c.title}</span>
+                </div>
+                <span class="shrink-0 flex items-center justify-center w-11 h-11 rounded-full bg-cyan/90 text-ink group-hover:scale-110 transition-transform">
+                  <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+              </div>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+
+    {/* Modal: vídeos do segmento */}
+    <div class="vs-modal fixed inset-0 z-[100] hidden flex-col bg-ink/95" role="dialog" aria-modal="true" aria-label="Produções do segmento">
+      <div class="flex items-center gap-4 px-5 sm:px-8 h-16 border-b border-white/10 shrink-0">
+        <span class="vs-title font-bold"></span>
+        <button type="button" class="vs-close ml-auto flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Fechar">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="vs-feed grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 overflow-y-auto p-5 sm:p-8 max-w-6xl w-full mx-auto"></div>
+    </div>
+
+    {/* Viewer: player embed */}
+    <div class="vs-viewer fixed inset-0 z-[110] hidden items-center justify-center bg-black/92 p-4" role="dialog" aria-modal="true" aria-label="Player de vídeo">
+      <button type="button" class="vv-close absolute top-5 right-5 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Fechar">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="w-full max-w-5xl aspect-video">
+        <iframe class="vv-frame w-full h-full rounded-xl" src="about:blank" title="Player de vídeo" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <script is:inline set:html={`window.__videoData = ${JSON.stringify(data)};`}></script>
+  </section>
+)}
+
+<script>
+  function initVideoShowcase() {
+    const root = document.querySelector<HTMLElement>('.vs-grid')?.closest('section')
+    if (!root) return
+    const cases = (window as any).__videoData as Array<{
+      title: string; segment: string; cover: string | null
+      videos: Array<{ title: string; embed: string; thumb: string | null }>
+    }>
+    if (!cases) return
+
+    const modal = root.querySelector<HTMLElement>('.vs-modal')
+    const vsTitle = root.querySelector<HTMLElement>('.vs-title')
+    const feed = root.querySelector<HTMLElement>('.vs-feed')
+    const viewer = root.querySelector<HTMLElement>('.vs-viewer')
+    const frame = root.querySelector<HTMLIFrameElement>('.vv-frame')
+    if (!modal || !vsTitle || !feed || !viewer || !frame) return
+
+    const openFeed = (i: number) => {
+      const c = cases[i]
+      vsTitle.textContent = c.title
+      feed.innerHTML = ''
+      c.videos.forEach((v) => {
+        const cell = document.createElement('button')
+        cell.type = 'button'
+        cell.className = 'relative aspect-video rounded-xl overflow-hidden bg-card border border-white/5 group text-left'
+        cell.innerHTML =
+          (v.thumb ? `<img src="${v.thumb}" loading="lazy" class="absolute inset-0 w-full h-full object-cover group-hover:opacity-80 transition" />` : '') +
+          '<div class="absolute inset-0 bg-black/25 group-hover:bg-black/40 transition flex items-center justify-center"><span class="flex items-center justify-center w-12 h-12 rounded-full bg-cyan/90 text-ink"><svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>' +
+          (v.title ? `<span class="absolute left-3 bottom-2 right-3 text-xs font-semibold text-white/90 line-clamp-1">${v.title}</span>` : '')
+        cell.addEventListener('click', () => openViewer(v.embed))
+        feed.appendChild(cell)
+      })
+      modal.classList.remove('hidden')
+      modal.classList.add('flex')
+      document.body.style.overflow = 'hidden'
+    }
+    const closeFeed = () => {
+      modal.classList.add('hidden')
+      modal.classList.remove('flex')
+      document.body.style.overflow = ''
+    }
+    const openViewer = (embed: string) => {
+      frame.src = embed
+      viewer.classList.remove('hidden')
+      viewer.classList.add('flex')
+    }
+    const closeViewer = () => {
+      viewer.classList.add('hidden')
+      viewer.classList.remove('flex')
+      frame.src = 'about:blank'
+    }
+
+    root.querySelectorAll<HTMLElement>('.vs-card').forEach((card) => {
+      card.addEventListener('click', () => openFeed(Number(card.dataset.index)))
+    })
+    root.querySelector('.vs-close')?.addEventListener('click', closeFeed)
+    root.querySelector('.vv-close')?.addEventListener('click', closeViewer)
+    viewer.addEventListener('click', (e) => { if (e.target === viewer) closeViewer() })
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return
+      if (!viewer.classList.contains('hidden')) closeViewer()
+      else if (!modal.classList.contains('hidden')) closeFeed()
+    })
+  }
+
+  initVideoShowcase()
+  document.addEventListener('astro:page-load', initVideoShowcase)
+</script>

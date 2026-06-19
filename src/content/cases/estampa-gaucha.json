@@ -1,0 +1,24 @@
+{
+  "title": "Estampa Gaúcha",
+  "client": "Estampa Gaúcha",
+  "segment": "Gastronomia",
+  "service": "Fotografia",
+  "cover": "estampa-gaucha-01.jpg",
+  "description": "Ensaio fotográfico gastronômico — pratos, ambiente e experiência capturados para fortalecer a percepção da marca.",
+  "gallery": [
+    "estampa-gaucha-01.jpg",
+    "estampa-gaucha-02.jpg",
+    "estampa-gaucha-03.jpg",
+    "estampa-gaucha-04.jpg",
+    "estampa-gaucha-05.jpg",
+    "estampa-gaucha-06.jpg",
+    "estampa-gaucha-07.jpg",
+    "estampa-gaucha-08.jpg",
+    "estampa-gaucha-09.jpg",
+    "estampa-gaucha-10.jpg",
+    "estampa-gaucha-11.jpg",
+    "estampa-gaucha-12.jpg",
+    "estampa-gaucha-13.jpg"
+  ],
+  "order": 4
+}

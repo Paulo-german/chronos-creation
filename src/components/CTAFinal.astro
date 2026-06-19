@@ -1,0 +1,42 @@
+---
+import { reader } from '../lib/reader'
+
+const home = await reader.singletons.home.read()
+const cta = home?.ctaFinal
+---
+
+<section class="relative overflow-hidden py-28 sm:py-36 text-center">
+  <div class="cta-glow" aria-hidden="true"></div>
+  <div class="max-w-3xl mx-auto px-5 sm:px-8 relative z-10">
+    <div data-reveal class="reveal">
+      <h2 class="text-3xl sm:text-5xl font-extrabold leading-tight">
+        {cta?.title}
+      </h2>
+      <p class="mt-6 text-mut text-base sm:text-lg leading-relaxed max-w-xl mx-auto">
+        {cta?.description}
+      </p>
+      <a
+        href="/#contato"
+        class="mt-10 inline-flex items-center gap-2.5 rounded-full bg-cyan hover:bg-cyan-bright text-ink font-bold px-8 py-4 text-sm uppercase tracking-wide transition"
+      >
+        {cta?.buttonLabel}
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Brilho em cúpula (meio-círculo) emanando da base, atrás do conteúdo. */
+  .cta-glow {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 130%;
+    height: 65%;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at bottom, rgba(51, 204, 255, 0.3), rgba(51, 204, 255, 0) 70%);
+  }
+</style>

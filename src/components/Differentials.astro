@@ -1,0 +1,28 @@
+---
+import { reader } from '../lib/reader'
+
+// Ícones decorativos fixos por posição (não editáveis pelo cliente).
+const icons = [
+  `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>`,
+  `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`,
+  `<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
+]
+
+const home = await reader.singletons.home.read()
+const items = (home?.differentials ?? []).map((d, i) => ({
+  ...d,
+  icon: icons[i % icons.length],
+}))
+---
+
+<section class="bg-panel border-y border-white/5 relative overflow-hidden flex items-center min-h-[25vh]">
+  <div class="max-w-8xl mx-auto px-5 sm:px-8 py-20 sm:py-28 grid sm:grid-cols-3 gap-10 relative z-10 w-full">
+    {items.map(item => (
+      <div data-reveal class="reveal">
+        <div class="text-cyan-soft mb-3" set:html={item.icon} />
+        <h3 class="font-bold uppercase text-sm tracking-wide">{item.title}</h3>
+        <p class="mt-2 text-sm text-white/80 leading-relaxed">{item.text}</p>
+      </div>
+    ))}
+  </div>
+</section>

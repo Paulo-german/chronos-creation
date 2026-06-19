@@ -1,0 +1,124 @@
+---
+import { reader, assetUrl } from '../lib/reader'
+
+const entries = await reader.collections.testimonials.all()
+const items = entries
+  .map((e) => ({ id: e.slug, ...e.entry }))
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+
+const quotes = items.filter((t) => !t.video && t.quote)
+const videos = items
+  .filter((t) => t.video)
+  .map((t) => ({
+    author: t.author,
+    company: t.company,
+    src: assetUrl(t.video, '/portfolio/testimonials/'),
+    poster: assetUrl(t.poster, '/portfolio/testimonials/'),
+  }))
+
+const stars = (n: number | undefined) => Math.max(0, Math.min(5, n ?? 5))
+---
+
+<section class="bg-ink py-24 sm:py-28">
+  <div class="max-w-8xl mx-auto px-5 sm:px-8">
+    <div data-reveal class="reveal mb-12">
+      <p class="eyebrow text-xs font-semibold uppercase text-cyan mb-3">Depoimentos</p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold">O que dizem sobre a Chronos</h2>
+      <p class="mt-2 text-mut max-w-xl">Resultados que viram relação — e relação que vira recomendação.</p>
+    </div>
+
+    {quotes.length > 0 && (
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {quotes.map((t) => (
+          <figure data-reveal class="reveal rounded-2xl bg-card border border-line p-7 flex flex-col">
+            <div class="flex gap-0.5 text-cyan mb-4" aria-label={`${stars(t.rating)} de 5 estrelas`}>
+              {Array.from({ length: stars(t.rating) }).map(() => (
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.8 5.9 21l1.4-6.8L2.2 9.5l6.9-.8z"/></svg>
+              ))}
+            </div>
+            <blockquote class="text-sm text-white/85 leading-relaxed flex-1">“{t.quote}”</blockquote>
+            <figcaption class="mt-5 pt-4 border-t border-white/10">
+              <span class="block font-bold text-sm">{t.author}</span>
+              {t.company && <span class="block text-xs text-mut mt-0.5">{t.company}</span>}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    )}
+
+    {videos.length > 0 && (
+      <div class="mt-6 grid sm:grid-cols-2 gap-5">
+        {videos.map((v, i) => (
+          <button
+            type="button"
+            class="tm-video group relative rounded-2xl overflow-hidden aspect-video border border-white/5 ph"
+            data-src={v.src}
+            aria-label={`Assistir depoimento: ${v.author}`}
+          >
+            {v.poster && <img src={v.poster} alt={v.author} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />}
+            <span class="absolute inset-0 bg-black/30 group-hover:bg-black/45 transition flex items-center justify-center">
+              <span class="flex items-center justify-center w-16 h-16 rounded-full bg-cyan/90 text-ink group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </span>
+            <span class="absolute left-5 bottom-4 text-left">
+              <span class="block text-sm font-bold">{v.author}</span>
+              {v.company && <span class="block text-xs text-white/70">{v.company}</span>}
+            </span>
+          </button>
+        ))}
+      </div>
+    )}
+  </div>
+
+  {/* Modal de vídeo (depoimento) */}
+  <div class="tm-modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 p-4 sm:p-8" role="dialog" aria-modal="true" aria-label="Depoimento em vídeo">
+    <button type="button" class="tm-close absolute top-5 right-5 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Fechar">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <div class="tm-media max-h-[88vh] flex items-center justify-center"></div>
+  </div>
+</section>
+
+<script>
+  function initTestimonials() {
+    const root = document.querySelector<HTMLElement>('.tm-modal')?.closest('section')
+    if (!root) return
+    const modal = root.querySelector<HTMLElement>('.tm-modal')
+    const media = root.querySelector<HTMLElement>('.tm-media')
+    if (!modal || !media) return
+
+    const open = (src: string) => {
+      media.innerHTML = ''
+      const v = document.createElement('video')
+      v.src = src
+      v.controls = true
+      v.autoplay = true
+      v.playsInline = true
+      v.className = 'max-h-[88vh] w-auto rounded-xl bg-black'
+      media.appendChild(v)
+      v.play?.().catch(() => {})
+      modal.classList.remove('hidden')
+      modal.classList.add('flex')
+      document.body.style.overflow = 'hidden'
+    }
+    const close = () => {
+      modal.classList.add('hidden')
+      modal.classList.remove('flex')
+      media.innerHTML = ''
+      document.body.style.overflow = ''
+    }
+
+    root.querySelectorAll<HTMLElement>('.tm-video').forEach((b) => {
+      b.addEventListener('click', () => { if (b.dataset.src) open(b.dataset.src) })
+    })
+    root.querySelector('.tm-close')?.addEventListener('click', close)
+    modal.addEventListener('click', (e) => { if (e.target === modal) close() })
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) close()
+    })
+  }
+
+  initTestimonials()
+  document.addEventListener('astro:page-load', initTestimonials)
+</script>

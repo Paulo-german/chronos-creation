@@ -1,0 +1,18 @@
+{
+  "title": "Pizza Di Bocca",
+  "client": "Pizza Di Bocca",
+  "segment": "Gastronomia",
+  "service": "Fotografia",
+  "cover": "pizza-di-bocca-01.jpg",
+  "description": "Ensaio fotográfico gastronômico — pratos, ambiente e experiência capturados para fortalecer a percepção da marca.",
+  "gallery": [
+    "pizza-di-bocca-01.jpg",
+    "pizza-di-bocca-02.jpg",
+    "pizza-di-bocca-03.jpg",
+    "pizza-di-bocca-04.jpg",
+    "pizza-di-bocca-05.jpg",
+    "pizza-di-bocca-06.jpg",
+    "pizza-di-bocca-07.jpg"
+  ],
+  "order": 6
+}

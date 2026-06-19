@@ -1,0 +1,97 @@
+---
+import { assetUrl } from '../lib/reader'
+
+interface Props {
+  images: string[]
+  eyebrow?: string
+  title?: string
+  description?: string
+  publicPath?: string
+}
+
+const { images, eyebrow = 'Em ação', title = '', description, publicPath = '/portfolio/marketing/' } = Astro.props
+const urls = images.map((i) => assetUrl(i, publicPath)).filter(Boolean) as string[]
+---
+
+<section class="bg-panel border-y border-white/5 py-20 sm:py-24">
+  <div class="max-w-8xl mx-auto px-5 sm:px-8">
+    <div data-reveal class="reveal mb-12">
+      <p class="eyebrow text-xs font-semibold uppercase text-cyan mb-3">{eyebrow}</p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold">{title}</h2>
+      {description && <p class="mt-2 text-mut max-w-xl">{description}</p>}
+    </div>
+
+    <div class="photo-grid columns-2 lg:columns-3 gap-4">
+      {urls.map((src, i) => (
+        <button type="button" class="pg-item mb-4 block w-full rounded-xl overflow-hidden break-inside-avoid border border-white/5 group" data-index={i} aria-label="Ampliar foto">
+          <img src={src} alt="" loading="lazy" class="w-full group-hover:opacity-90 transition" />
+        </button>
+      ))}
+    </div>
+  </div>
+
+  {/* Lightbox */}
+  <div class="pg-lightbox fixed inset-0 z-[100] hidden items-center justify-center bg-black/92 p-4" role="dialog" aria-modal="true" aria-label="Foto ampliada">
+    <button type="button" class="pg-close absolute top-5 right-5 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Fechar">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <button type="button" class="pg-prev absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Anterior">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button type="button" class="pg-next absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Próximo">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <img class="pg-image max-h-[88vh] w-auto object-contain rounded-xl" src="" alt="" />
+  </div>
+
+  <script is:inline set:html={`window.__pgImages = ${JSON.stringify(urls)};`}></script>
+</section>
+
+<script>
+  function initPhotoGallery() {
+    const root = document.querySelector<HTMLElement>('.photo-grid')?.closest('section')
+    if (!root) return
+    const urls = (window as any).__pgImages as string[]
+    if (!urls) return
+    const lb = root.querySelector<HTMLElement>('.pg-lightbox')
+    const img = root.querySelector<HTMLImageElement>('.pg-image')
+    if (!lb || !img) return
+
+    let idx = 0
+    const render = () => {
+      idx = (idx + urls.length) % urls.length
+      img.src = urls[idx]
+    }
+    const open = (i: number) => {
+      idx = i
+      render()
+      lb.classList.remove('hidden')
+      lb.classList.add('flex')
+      document.body.style.overflow = 'hidden'
+    }
+    const close = () => {
+      lb.classList.add('hidden')
+      lb.classList.remove('flex')
+      img.src = ''
+      document.body.style.overflow = ''
+    }
+    const move = (d: number) => { idx += d; render() }
+
+    root.querySelectorAll<HTMLElement>('.pg-item').forEach((b) => {
+      b.addEventListener('click', () => open(Number(b.dataset.index)))
+    })
+    root.querySelector('.pg-close')?.addEventListener('click', close)
+    root.querySelector('.pg-prev')?.addEventListener('click', () => move(-1))
+    root.querySelector('.pg-next')?.addEventListener('click', () => move(1))
+    lb.addEventListener('click', (e) => { if (e.target === lb) close() })
+    document.addEventListener('keydown', (e) => {
+      if (lb.classList.contains('hidden')) return
+      if (e.key === 'Escape') close()
+      if (e.key === 'ArrowLeft') move(-1)
+      if (e.key === 'ArrowRight') move(1)
+    })
+  }
+
+  initPhotoGallery()
+  document.addEventListener('astro:page-load', initPhotoGallery)
+</script>

@@ -1,0 +1,52 @@
+{
+  "title": "Imóveis",
+  "client": "",
+  "segment": "Imóveis",
+  "service": "Audiovisual",
+  "cover": null,
+  "description": "Vídeos para o mercado imobiliário — imóveis e incorporações apresentados com sofisticação.",
+  "gallery": [],
+  "videos": [
+    {
+      "title": "133Prescot",
+      "url": ""
+    },
+    {
+      "title": "5million",
+      "url": ""
+    },
+    {
+      "title": "CASA ERNANE",
+      "url": ""
+    },
+    {
+      "title": "compasse matt OFICIAL",
+      "url": ""
+    },
+    {
+      "title": "FABRICIO HW V1",
+      "url": ""
+    },
+    {
+      "title": "MNS CONSTANTINO",
+      "url": ""
+    },
+    {
+      "title": "My New Surface SepV1",
+      "url": ""
+    },
+    {
+      "title": "Realize Imoveis Aurum",
+      "url": ""
+    },
+    {
+      "title": "Royal Bulevard Casa 1 v1",
+      "url": ""
+    },
+    {
+      "title": "VIDEO ADS MATT Ajustado",
+      "url": ""
+    }
+  ],
+  "order": 7
+}

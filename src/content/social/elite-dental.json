@@ -1,0 +1,100 @@
+{
+  "title": "Elite Dental",
+  "client": "Elite Dental",
+  "segment": "Odontologia",
+  "handle": "@elitedental",
+  "cover": "elite-dental-i01.jpg",
+  "order": 3,
+  "posts": [
+    {
+      "type": "video",
+      "image": null,
+      "video": "elite-dental-v01.mp4",
+      "poster": "elite-dental-v01.jpg"
+    },
+    {
+      "type": "video",
+      "image": null,
+      "video": "elite-dental-v02.mp4",
+      "poster": "elite-dental-v02.jpg"
+    },
+    {
+      "type": "video",
+      "image": null,
+      "video": "elite-dental-v03.mp4",
+      "poster": "elite-dental-v03.jpg"
+    },
+    {
+      "type": "video",
+      "image": null,
+      "video": "elite-dental-v04.mp4",
+      "poster": "elite-dental-v04.jpg"
+    },
+    {
+      "type": "video",
+      "image": null,
+      "video": "elite-dental-v05.mp4",
+      "poster": "elite-dental-v05.jpg"
+    },
+    {
+      "type": "video",
+      "image": null,
+      "video": "elite-dental-v06.mp4",
+      "poster": "elite-dental-v06.jpg"
+    },
+    {
+      "type": "video",
+      "image": null,
+      "video": "elite-dental-v07.mp4",
+      "poster": "elite-dental-v07.jpg"
+    },
+    {
+      "type": "image",
+      "image": "elite-dental-i01.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "elite-dental-i02.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "elite-dental-i03.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "elite-dental-i04.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "elite-dental-i05.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "elite-dental-i06.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "elite-dental-i07.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "elite-dental-i08.jpg",
+      "video": null,
+      "poster": null
+    }
+  ]
+}

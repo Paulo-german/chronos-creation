@@ -1,0 +1,57 @@
+{
+  "hero": {
+    "title": "Sofisticação e criatividade<br>para eternizar sua marca<br>no mundo.",
+    "subtitle": "A Chronos Creation une branding, estratégia e audiovisual para transformar empresas em marcas mais fortes, desejadas e memoráveis.",
+    "ctaLabel": "Posicionar minha marca",
+    "ctaHref": "/#contato"
+  },
+  "marquee": [
+    "Estratégia",
+    "Narrativa Visual",
+    "Posicionamento",
+    "Direção Criativa",
+    "Percepção de Marca"
+  ],
+  "differentials": [
+    {
+      "title": "Mais do que comunicação",
+      "text": "Criamos posicionamento. Cada projeto nasce de estratégia real, não de tendência."
+    },
+    {
+      "title": "Percepção define valor",
+      "text": "Em um mercado onde a percepção vale mais que o produto, presença visual não é opcional."
+    },
+    {
+      "title": "Marcas difíceis de ignorar",
+      "text": "Unimos branding, audiovisual e estratégia para transformar negócios em referências."
+    }
+  ],
+  "about": {
+    "title": "Muitas empresas são excelentes no que fazem. Mas visualmente… parecem comuns.",
+    "paragraphs": [
+      "Em um mercado onde percepção define valor, não basta apenas existir online. É preciso construir presença, autoridade e reconhecimento.",
+      "A Chronos nasceu para transformar negócios em marcas visualmente fortes, estrategicamente posicionadas e difíceis de ignorar.",
+      "Unimos direção criativa, branding, audiovisual e estratégia digital para criar experiências que elevam a percepção da sua empresa no mercado."
+    ],
+    "ctaLabel": "Iniciar projeto"
+  },
+  "servicesHeader": {
+    "eyebrow": "Soluções",
+    "title": "O Que Fazemos"
+  },
+  "portfolioHeader": {
+    "eyebrow": "Experiências Visuais",
+    "title": "Não criamos apenas conteúdo.<br />Criamos percepção.",
+    "description": "Cada projeto desenvolvido pela Chronos é pensado para transmitir valor, autoridade, presença e diferenciação."
+  },
+  "processHeader": {
+    "eyebrow": "Diferencial",
+    "title": "Marketing sem direção vira ruído.",
+    "description": "A Chronos não acredita em conteúdo genérico. Cada projeto nasce de estratégia, comportamento de mercado e direção criativa."
+  },
+  "ctaFinal": {
+    "title": "Sua marca merece mais do que presença.",
+    "description": "Ela merece posicionamento, percepção e uma comunicação que realmente represente o valor do seu negócio.",
+    "buttonLabel": "Vamos Conversar"
+  }
+}

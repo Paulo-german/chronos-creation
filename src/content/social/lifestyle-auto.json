@@ -1,0 +1,64 @@
+{
+  "title": "Lifestyle Auto Help",
+  "client": "Lifestyle Auto Help",
+  "segment": "Automotivo",
+  "handle": "@lifestyleauto",
+  "cover": "lifestyle-auto-i01.jpg",
+  "order": 4,
+  "posts": [
+    {
+      "type": "video",
+      "image": null,
+      "video": "lifestyle-auto-v01.mp4",
+      "poster": "lifestyle-auto-v01.jpg"
+    },
+    {
+      "type": "video",
+      "image": null,
+      "video": "lifestyle-auto-v02.mp4",
+      "poster": "lifestyle-auto-v02.jpg"
+    },
+    {
+      "type": "video",
+      "image": null,
+      "video": "lifestyle-auto-v03.mp4",
+      "poster": "lifestyle-auto-v03.jpg"
+    },
+    {
+      "type": "video",
+      "image": null,
+      "video": "lifestyle-auto-v04.mp4",
+      "poster": "lifestyle-auto-v04.jpg"
+    },
+    {
+      "type": "video",
+      "image": null,
+      "video": "lifestyle-auto-v05.mp4",
+      "poster": "lifestyle-auto-v05.jpg"
+    },
+    {
+      "type": "image",
+      "image": "lifestyle-auto-i01.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "lifestyle-auto-i02.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "lifestyle-auto-i03.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "lifestyle-auto-i04.jpg",
+      "video": null,
+      "poster": null
+    }
+  ]
+}

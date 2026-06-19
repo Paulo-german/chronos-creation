@@ -1,0 +1,22 @@
+{
+  "title": "Villa Padoca",
+  "client": "Villa Padoca",
+  "segment": "Gastronomia",
+  "service": "Fotografia",
+  "cover": "villa-padoca-01.jpg",
+  "description": "Ensaio fotográfico gastronômico — pratos, ambiente e experiência capturados para fortalecer a percepção da marca.",
+  "gallery": [
+    "villa-padoca-01.jpg",
+    "villa-padoca-02.jpg",
+    "villa-padoca-03.jpg",
+    "villa-padoca-04.jpg",
+    "villa-padoca-05.jpg",
+    "villa-padoca-06.jpg",
+    "villa-padoca-07.jpg",
+    "villa-padoca-08.jpg",
+    "villa-padoca-09.jpg",
+    "villa-padoca-10.jpg",
+    "villa-padoca-11.jpg"
+  ],
+  "order": 8
+}

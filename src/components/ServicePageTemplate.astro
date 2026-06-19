@@ -1,0 +1,130 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Hero from './Hero.astro'
+import CTAFinal from './CTAFinal.astro'
+import { reader, assetUrl } from '../lib/reader'
+
+export interface Props {
+  seoTitle: string
+  description: string
+  eyebrow: string
+  heroTitle: string
+  heroSubtitle: string
+  whatTitle?: string
+  whatBody?: string[]
+  deliverables?: string[]
+  forWhom?: string[]
+  heroBgImages?: string[]
+  heroCta?: { label: string; href: string }
+}
+
+const {
+  seoTitle,
+  description,
+  eyebrow,
+  heroTitle,
+  heroSubtitle,
+  whatTitle,
+  whatBody = [],
+  deliverables = [],
+  forWhom = [],
+  heroBgImages = [],
+  heroCta = { label: 'Falar sobre este projeto', href: '/#contato' },
+} = Astro.props
+
+// Projetos do portfólio cuja categoria casa com este serviço.
+const entries = await reader.collections.projects.all()
+const related = entries
+  .map((e) => ({ id: e.slug, ...e.entry }))
+  .filter((p) => (p.category ?? '').toLowerCase() === eyebrow.toLowerCase())
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+  .slice(0, 3)
+---
+
+<BaseLayout title={seoTitle} description={description}>
+  <Hero
+    eyebrow={eyebrow}
+    title={heroTitle}
+    subtitle={heroSubtitle}
+    bgImages={heroBgImages}
+    cta={heroCta}
+  />
+
+  {(whatTitle || whatBody.length > 0) && (
+    <section class="bg-ink py-20 sm:py-24">
+      <div class="max-w-8xl mx-auto px-5 sm:px-8 grid md:grid-cols-2 gap-8 md:gap-16">
+        {whatTitle && (
+          <h2 data-reveal class="reveal text-3xl sm:text-4xl font-extrabold leading-tight md:sticky md:top-24 self-start">{whatTitle}</h2>
+        )}
+        <div>
+          {whatBody.map((p) => (
+            <p data-reveal class="reveal text-mut leading-relaxed mb-5 last:mb-0">{p}</p>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {(deliverables.length > 0 || forWhom.length > 0) && (
+    <section class="bg-panel py-20 sm:py-24 border-y border-white/5">
+      <div class="max-w-8xl mx-auto px-5 sm:px-8 grid sm:grid-cols-2 gap-12">
+        {deliverables.length > 0 && (
+          <div data-reveal class="reveal">
+            <h3 class="eyebrow mb-6">O que entregamos</h3>
+            <ul class="space-y-3">
+              {deliverables.map((item) => (
+                <li class="flex items-start gap-3 text-mut text-sm">
+                  <svg class="w-4 h-4 text-cyan mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {forWhom.length > 0 && (
+          <div data-reveal class="reveal">
+            <h3 class="eyebrow mb-6">Para quem é</h3>
+            <ul class="space-y-3">
+              {forWhom.map((item) => (
+                <li class="flex items-start gap-3 text-mut text-sm">
+                  <svg class="w-4 h-4 text-cyan mt-0.5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  <slot />
+
+  {related.length > 0 && (
+    <section class="bg-ink py-20 sm:py-24">
+      <div class="max-w-8xl mx-auto px-5 sm:px-8">
+        <div data-reveal class="reveal flex items-end justify-between mb-8 gap-4">
+          <h2 class="text-2xl sm:text-3xl font-extrabold">Projetos de {eyebrow.toLowerCase()}</h2>
+          <a href="/projetos" class="hidden sm:inline-flex items-center gap-2 text-sm font-semibold text-cyan hover:gap-3 transition-all shrink-0">
+            Ver todos
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {related.map((p) => (
+            <a href="/projetos" data-reveal class="reveal group ph relative rounded-2xl overflow-hidden aspect-video border border-white/5 block">
+              {p.cover && (
+                <img src={assetUrl(p.cover, '/portfolio/')} alt={p.title} class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+              )}
+              <div class="absolute inset-0 flex items-end p-5 bg-gradient-to-t from-black/65 via-black/10 to-transparent">
+                <span class="text-xs font-semibold uppercase tracking-widest text-white/85 relative z-10">{p.title}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CTAFinal />
+</BaseLayout>

@@ -1,0 +1,23 @@
+---
+import { reader } from '../lib/reader'
+
+const home = await reader.singletons.home.read()
+const items = home?.marquee?.length
+  ? home.marquee
+  : ['Estratégia', 'Narrativa Visual', 'Posicionamento', 'Direção Criativa', 'Percepção de Marca']
+---
+
+<div class="border-y border-white/10 overflow-hidden py-3.5">
+  <div class="marquee flex whitespace-nowrap will-change-transform">
+    {[0, 1].map(i => (
+      <span class="flex shrink-0" aria-hidden={i === 1 ? 'true' : undefined}>
+        {items.map(item => (
+          <span class="flex items-center">
+            <span class="px-8 text-xs font-semibold uppercase tracking-[0.2em] text-white/85">{item}</span>
+            <img src="/favicon.svg" alt="" aria-hidden="true" class="w-4 h-4 shrink-0" />
+          </span>
+        ))}
+      </span>
+    ))}
+  </div>
+</div>

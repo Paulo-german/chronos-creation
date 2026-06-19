@@ -1,0 +1,16 @@
+{
+  "title": "RSM",
+  "client": "RSM Home Renovation",
+  "segment": "Reformas residenciais",
+  "service": "Branding",
+  "cover": "rsm-01.jpg",
+  "description": "Identidade para uma empresa de reformas residenciais — símbolo arquitetônico, paleta sólida e versões para múltiplos fundos e aplicações.",
+  "gallery": [
+    "rsm-01.jpg",
+    "rsm-02.jpg",
+    "rsm-03.jpg",
+    "rsm-04.jpg",
+    "rsm-05.jpg"
+  ],
+  "order": 3
+}

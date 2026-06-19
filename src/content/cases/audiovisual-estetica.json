@@ -1,0 +1,44 @@
+{
+  "title": "Estética & Bem-estar",
+  "client": "",
+  "segment": "Estética & Bem-estar",
+  "service": "Audiovisual",
+  "cover": null,
+  "description": "Audiovisual para clínicas e marcas de estética — transformação e cuidado em vídeo.",
+  "gallery": [],
+  "videos": [
+    {
+      "title": "Brazilian 1411",
+      "url": ""
+    },
+    {
+      "title": "Brazilian Body Quest v2",
+      "url": ""
+    },
+    {
+      "title": "Holga Classic",
+      "url": ""
+    },
+    {
+      "title": "Holga prado Ajuste de cor",
+      "url": ""
+    },
+    {
+      "title": "Holga prado Ajuste de cor",
+      "url": ""
+    },
+    {
+      "title": "Holga Prado Antes depois",
+      "url": ""
+    },
+    {
+      "title": "Reels ASMR Holga",
+      "url": ""
+    },
+    {
+      "title": "Spa BRZ",
+      "url": ""
+    }
+  ],
+  "order": 8
+}

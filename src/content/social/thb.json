@@ -1,0 +1,52 @@
+{
+  "title": "THB Remodeling",
+  "client": "THB Remodeling",
+  "segment": "Reformas",
+  "handle": "@thb",
+  "cover": "thb-i01.jpg",
+  "order": 6,
+  "posts": [
+    {
+      "type": "video",
+      "image": null,
+      "video": "thb-v01.mp4",
+      "poster": "thb-v01.jpg"
+    },
+    {
+      "type": "video",
+      "image": null,
+      "video": "thb-v02.mp4",
+      "poster": "thb-v02.jpg"
+    },
+    {
+      "type": "image",
+      "image": "thb-i01.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "thb-i02.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "thb-i03.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "thb-i04.jpg",
+      "video": null,
+      "poster": null
+    },
+    {
+      "type": "image",
+      "image": "thb-i05.jpg",
+      "video": null,
+      "poster": null
+    }
+  ]
+}

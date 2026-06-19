@@ -1,0 +1,202 @@
+---
+import { assetUrl } from '../lib/reader'
+
+interface Case {
+  id: string
+  title: string
+  client?: string | null
+  segment?: string | null
+  cover?: string | null
+  description?: string | null
+  gallery?: (string | null)[]
+}
+
+interface Props {
+  cases: Case[]
+  eyebrow?: string
+  title?: string
+  description?: string
+}
+
+const { cases, eyebrow = 'Cases', title = 'Marcas que criamos', description } = Astro.props
+
+// Pré-resolve as URLs das galerias para passar ao lightbox via JSON.
+const data = cases.map((c) => ({
+  title: c.title,
+  client: c.client ?? '',
+  segment: c.segment ?? '',
+  images: (c.gallery ?? []).map((g) => assetUrl(g, '/portfolio/cases/')).filter(Boolean),
+}))
+---
+
+<section id="cases" class="bg-panel border-y border-white/5 py-20 sm:py-24 scroll-mt-20">
+  <div class="max-w-8xl mx-auto px-5 sm:px-8">
+    <div data-reveal class="reveal mb-12">
+      <p class="eyebrow text-xs font-semibold uppercase text-cyan mb-3">{eyebrow}</p>
+      <h2 class="text-3xl sm:text-4xl font-extrabold">{title}</h2>
+      {description && <p class="mt-2 text-mut max-w-xl">{description}</p>}
+    </div>
+
+    <div class="case-grid grid grid-cols-1 sm:grid-cols-2 gap-5">
+      {cases.map((c, i) => (
+        <button
+          type="button"
+          class="case-card group relative rounded-2xl overflow-hidden aspect-video border border-white/5 text-left"
+          data-index={i}
+          aria-label={`Ver case: ${c.title}`}
+        >
+          {c.cover && (
+            <img
+              src={assetUrl(c.cover, '/portfolio/cases/')}
+              alt={c.title}
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+          )}
+          <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent"></div>
+          <div class="absolute inset-x-0 bottom-0 p-6 flex items-end justify-between gap-4">
+            <div>
+              {c.segment && (
+                <span class="block text-[11px] font-semibold uppercase tracking-widest text-cyan-soft mb-1">{c.segment}</span>
+              )}
+              <span class="block text-lg font-extrabold leading-tight">{c.title}</span>
+            </div>
+            <span class="shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-white/10 group-hover:bg-cyan group-hover:text-ink transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h6v6M21 3l-9 9M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
+            </span>
+          </div>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  {/* Lightbox */}
+  <div
+    class="case-lightbox fixed inset-0 z-[100] hidden items-center justify-center bg-black/92 p-4 sm:p-8"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Galeria do case"
+  >
+    <button type="button" class="lb-close absolute top-5 right-5 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Fechar">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+
+    <button type="button" class="lb-prev absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Anterior">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button type="button" class="lb-next absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Próximo">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+
+    <div class="w-full max-w-5xl">
+      <div class="text-center mb-4">
+        <span class="lb-title text-sm font-semibold uppercase tracking-widest text-white/90"></span>
+        <span class="lb-counter ml-3 text-xs text-white/50"></span>
+      </div>
+      <div class="w-fit max-w-full mx-auto relative">
+        <img class="lb-image block max-h-[66vh] max-w-full w-auto rounded-xl" src="" alt="" />
+        <img
+          src="/logo-white.png"
+          alt=""
+          aria-hidden="true"
+          class="pointer-events-none absolute bottom-3 right-4 w-20 sm:w-24 opacity-80"
+          style="filter: drop-shadow(0 1px 3px rgba(0,0,0,.55))"
+        />
+      </div>
+      <div class="lb-thumbs mt-4 flex gap-2 overflow-x-auto pb-1" style="justify-content: safe center"></div>
+    </div>
+  </div>
+
+  <script is:inline set:html={`window.__caseGalleryData = ${JSON.stringify(data)};`}></script>
+</section>
+
+<script>
+  function initCaseGallery() {
+    const root = document.querySelector<HTMLElement>('.case-grid')?.closest('section')
+    if (!root) return
+    const cases = (window as any).__caseGalleryData as Array<{ title: string; client: string; segment: string; images: string[] }>
+    if (!cases) return
+
+    const lb = root.querySelector<HTMLElement>('.case-lightbox')
+    const img = root.querySelector<HTMLImageElement>('.lb-image')
+    const titleEl = root.querySelector<HTMLElement>('.lb-title')
+    const counter = root.querySelector<HTMLElement>('.lb-counter')
+    const thumbsEl = root.querySelector<HTMLElement>('.lb-thumbs')
+    if (!lb || !img || !titleEl || !counter || !thumbsEl) return
+
+    let caseIndex = 0
+    let slide = 0
+
+    const buildThumbs = () => {
+      const c = cases[caseIndex]
+      thumbsEl.innerHTML = ''
+      if (!c) return
+      c.images.forEach((src, i) => {
+        const b = document.createElement('button')
+        b.type = 'button'
+        b.className = 'lb-thumb shrink-0 w-20 h-12 rounded-md overflow-hidden border-2 transition'
+        b.setAttribute('aria-label', `Slide ${i + 1}`)
+        const t = document.createElement('img')
+        t.src = src
+        t.loading = 'lazy'
+        t.className = 'w-full h-full object-cover'
+        b.appendChild(t)
+        b.addEventListener('click', () => { slide = i; render() })
+        thumbsEl.appendChild(b)
+      })
+    }
+
+    const render = () => {
+      const c = cases[caseIndex]
+      if (!c || !c.images.length) return
+      slide = (slide + c.images.length) % c.images.length
+      img.src = c.images[slide]
+      img.alt = `${c.title} — ${slide + 1}`
+      titleEl.textContent = c.title
+      counter.textContent = `${slide + 1} / ${c.images.length}`
+      const thumbs = Array.from(thumbsEl.querySelectorAll<HTMLElement>('.lb-thumb'))
+      thumbs.forEach((t, i) => {
+        const active = i === slide
+        t.classList.toggle('border-cyan', active)
+        t.classList.toggle('opacity-100', active)
+        t.classList.toggle('border-transparent', !active)
+        t.classList.toggle('opacity-40', !active)
+      })
+      thumbs[slide]?.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' })
+    }
+
+    const open = (i: number) => {
+      caseIndex = i
+      slide = 0
+      buildThumbs()
+      render()
+      lb.classList.remove('hidden')
+      lb.classList.add('flex')
+      document.body.style.overflow = 'hidden'
+    }
+    const close = () => {
+      lb.classList.add('hidden')
+      lb.classList.remove('flex')
+      img.src = ''
+      document.body.style.overflow = ''
+    }
+    const move = (d: number) => { slide += d; render() }
+
+    root.querySelectorAll<HTMLElement>('.case-card').forEach((card) => {
+      card.addEventListener('click', () => open(Number(card.dataset.index)))
+    })
+    root.querySelector('.lb-close')?.addEventListener('click', close)
+    root.querySelector('.lb-prev')?.addEventListener('click', () => move(-1))
+    root.querySelector('.lb-next')?.addEventListener('click', () => move(1))
+    lb.addEventListener('click', (e) => { if (e.target === lb) close() })
+    document.addEventListener('keydown', (e) => {
+      if (lb.classList.contains('hidden')) return
+      if (e.key === 'Escape') close()
+      if (e.key === 'ArrowLeft') move(-1)
+      if (e.key === 'ArrowRight') move(1)
+    })
+  }
+
+  initCaseGallery()
+  document.addEventListener('astro:page-load', initCaseGallery)
+</script>

@@ -1,0 +1,99 @@
+---
+import '../styles/global.css'
+import Navbar from '../components/Navbar.astro'
+import Footer from '../components/Footer.astro'
+import WhatsAppFloat from '../components/WhatsAppFloat.astro'
+
+interface Props {
+  title: string
+  description: string
+}
+
+const { title, description } = Astro.props
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <title>{title}</title>
+  </head>
+  <body class="font-sans antialiased">
+    <Navbar />
+    <slot />
+    <Footer />
+    <WhatsAppFloat />
+
+    <script>
+      // Reveal on scroll
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('in')
+              io.unobserve(e.target)
+            }
+          })
+        },
+        { threshold: 0.12 },
+      )
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el))
+
+      // Parallax sutil dos ícones flutuantes (desligado em prefers-reduced-motion)
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      const nodes = Array.from(document.querySelectorAll('[data-parallax]'))
+      if (!reduce && nodes.length) {
+        const items = nodes.map((el) => ({
+          el,
+          speed: parseFloat((el as HTMLElement).dataset.parallax || '0.12'),
+          base: 0,
+        }))
+
+        const measure = () => {
+          items.forEach((i) => {
+            i.el.style.transform = ''
+            i.base = i.el.getBoundingClientRect().top + window.scrollY
+          })
+        }
+
+        const update = () => {
+          const vh = window.innerHeight
+          const sy = window.scrollY
+          items.forEach((i) => {
+            const center = i.base + i.el.offsetHeight / 2 - sy
+            const delta = center - vh / 2
+            i.el.style.transform = `translate3d(0, ${(-delta * i.speed).toFixed(1)}px, 0)`
+          })
+        }
+
+        let ticking = false
+        const onScroll = () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              update()
+              ticking = false
+            })
+            ticking = true
+          }
+        }
+
+        measure()
+        update()
+        window.addEventListener('scroll', onScroll, { passive: true })
+        window.addEventListener('resize', () => {
+          measure()
+          update()
+        })
+        window.addEventListener('load', () => {
+          measure()
+          update()
+        })
+      }
+    </script>
+  </body>
+</html>

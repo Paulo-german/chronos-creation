@@ -1,0 +1,17 @@
+{
+  "title": "Boni Sushi",
+  "client": "Boni Sushi",
+  "segment": "Gastronomia",
+  "service": "Fotografia",
+  "cover": "boni-sushi-01.jpg",
+  "description": "Ensaio fotográfico gastronômico — pratos, ambiente e experiência capturados para fortalecer a percepção da marca.",
+  "gallery": [
+    "boni-sushi-01.jpg",
+    "boni-sushi-02.jpg",
+    "boni-sushi-03.jpg",
+    "boni-sushi-04.jpg",
+    "boni-sushi-05.jpg",
+    "boni-sushi-06.jpg"
+  ],
+  "order": 1
+}

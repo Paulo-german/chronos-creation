@@ -1,0 +1,50 @@
+---
+import { reader, assetUrl } from '../lib/reader'
+
+const settings = await reader.singletons.settings.read()
+
+const navLinks = settings?.nav?.length
+  ? settings.nav
+  : [
+      { href: '/#portfolio', label: 'Portfólio' },
+      { href: '/#servicos', label: 'Soluções' },
+      { href: '/#sobre', label: 'Sobre' },
+      { href: '/#contato', label: 'Contato' },
+    ]
+
+const igIcon = `<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>`
+
+const socials = (settings?.social?.length
+  ? settings.social
+  : [
+      { label: 'Instagram @chronoscreation', href: 'https://instagram.com/chronoscreation' },
+      { label: 'Instagram @chronoscreationbr', href: 'https://instagram.com/chronoscreationbr' },
+    ]
+).map(s => ({ ...s, icon: igIcon }))
+
+const logo = assetUrl(settings?.logo) ?? '/logo-white.png'
+const copyright = settings?.copyright ?? '© CHRONOS Creation — Charlotte · Port Saint Lucie · Fortaleza · Foz do Iguaçu'
+---
+
+<footer class="bg-ink border-t border-white/5 py-10">
+  <div class="max-w-8xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+    <a href="/" aria-label="CHRONOS Creation — topo">
+      <img src={logo} alt="CHRONOS Creation" class="h-7 w-auto opacity-70" />
+    </a>
+
+    <nav class="flex gap-6 text-sm text-mut">
+      {navLinks.map(l => (
+        <a href={l.href} class="hover:text-white transition">{l.label}</a>
+      ))}
+    </nav>
+
+    <div class="flex gap-4 text-mut">
+      {socials.map(s => (
+        <a href={s.href} aria-label={s.label} class="hover:text-cyan transition" set:html={s.icon} />
+      ))}
+    </div>
+  </div>
+  <p class="text-center text-xs text-mut/60 mt-8">
+    {copyright}
+  </p>
+</footer>

@@ -1,0 +1,84 @@
+---
+import FloatingIcon from './FloatingIcon.astro'
+
+interface Props {
+  title?: string
+  subtitle?: string
+  cta?: { label: string; href: string }
+  eyebrow?: string
+  backLink?: boolean
+  /** mostra o vídeo de fundo + indicador de scroll (só na home) */
+  video?: boolean
+  /** mosaico de imagens no fundo (ex.: cases na página de branding) */
+  bgImages?: string[]
+  /** caminho de um ícone decorativo flutuante (só na home) */
+  decorIcon?: string
+}
+
+const {
+  title = 'Sofisticação e criatividade<br>para eternizar sua marca<br>no mundo.',
+  subtitle = 'A Chronos Creation une branding, estratégia e audiovisual para transformar empresas em marcas mais fortes, desejadas e memoráveis.',
+  cta = { label: 'Posicionar minha marca', href: '/#contato' },
+  eyebrow,
+  backLink = false,
+  video = false,
+  bgImages = [],
+  decorIcon,
+} = Astro.props
+---
+
+<section id="top" class={`relative flex flex-col justify-center overflow-hidden ${backLink ? 'pt-32 pb-20 sm:pt-40 sm:pb-24' : 'min-h-[88vh] pt-32 pb-20 sm:pt-40 sm:pb-28'}`}>
+  {video && (
+    <video
+      class="absolute inset-0 w-full h-full object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    >
+      <source src="/Chronos%20Site.mp4" type="video/mp4" />
+    </video>
+  )}
+  {bgImages.length > 0 ? (
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="grid grid-cols-3 sm:grid-cols-5 lg:grid-cols-7 h-full" style="grid-auto-rows: 1fr">
+        {bgImages.map((src) => (
+          <img src={src} alt="" aria-hidden="true" loading="lazy" class="w-full h-full object-cover" />
+        ))}
+      </div>
+      <div class="absolute inset-0 bg-ink/82"></div>
+      <div class="aura absolute inset-0 opacity-60"></div>
+    </div>
+  ) : (
+    <div class="aura absolute inset-0 opacity-85"></div>
+  )}
+  {decorIcon && (
+    <FloatingIcon src={decorIcon} class="right-[5%] top-[24%] w-32 lg:w-48" variant="b" speed={0.16} opacity={0.42} />
+  )}
+  <div class="max-w-8xl mx-auto px-5 sm:px-8 relative z-10">
+    <div class="text-center">
+      {eyebrow && (
+        <p class="eyebrow text-xs font-semibold uppercase text-cyan mb-5">{eyebrow}</p>
+      )}
+      <h1
+        class="font-extrabold text-white text-4xl sm:text-5xl lg:text-6xl uppercase leading-[0.95] tracking-tight max-w-5xl mx-auto"
+        set:html={title}
+      />
+      <p class="mt-8 text-mut text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">{subtitle}</p>
+      <div class="mt-9 flex justify-center">
+        <a
+          href={cta.href}
+          class="inline-flex items-center gap-2.5 rounded-full border border-white/25 px-7 py-3.5 text-sm font-semibold uppercase tracking-wide hover:border-cyan hover:text-cyan transition"
+        >
+          {cta.label}
+        </a>
+      </div>
+    </div>
+  </div>
+  {video && (
+    <div class="absolute left-1/2 -translate-x-1/2 bottom-8 h-20 w-px overflow-hidden">
+      <div class="scroll-drip"></div>
+    </div>
+  )}
+</section>

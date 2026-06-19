@@ -1,0 +1,12 @@
+{
+  "title": "Evento",
+  "client": "Cliente",
+  "category": "Audiovisual",
+  "cover": "marketing/marketing-05.jpg",
+  "videoUrl": null,
+  "description": "Cobertura fotográfica e audiovisual de evento, registrando os melhores momentos com qualidade cinematográfica.",
+  "year": "2024",
+  "gridClass": "",
+  "minHeight": "min-h-[200px]",
+  "order": 4
+}

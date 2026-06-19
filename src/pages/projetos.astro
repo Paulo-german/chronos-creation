@@ -1,0 +1,78 @@
+---
+export const prerender = true
+
+import { reader, assetUrl } from '../lib/reader'
+import { videoThumb } from '../lib/video'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Hero from '../components/Hero.astro'
+import ProjectShowcase from '../components/ProjectShowcase.astro'
+import CTAFinal from '../components/CTAFinal.astro'
+
+const entries = await reader.collections.projects.all()
+const projects = entries
+  .map(e => ({ id: e.slug, ...e.entry }))
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+
+// Cases (branding, fotografia…) entram na listagem; ao clicar levam à galeria
+// da página do serviço correspondente.
+const serviceHref: Record<string, string> = {
+  Branding: '/branding#cases',
+  Fotografia: '/fotografia#cases',
+  Audiovisual: '/audiovisual#producoes',
+}
+const caseItems = (await reader.collections.cases.all())
+  .map(e => ({ id: e.slug, ...e.entry }))
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+  .map(c => {
+    const isAv = c.service === 'Audiovisual'
+    const avThumb = isAv ? ((c.videos ?? []).map(v => videoThumb(v.url)).find(Boolean) ?? null) : null
+    return {
+      id: c.id,
+      title: c.title,
+      client: c.client,
+      category: c.service,
+      cover: isAv ? avThumb : assetUrl(c.cover, '/portfolio/cases/'),
+      description: c.description,
+      href: serviceHref[c.service] ?? '/projetos',
+      hasContent: isAv ? !!avThumb : true,
+    }
+  })
+  .filter(c => c.hasContent)
+
+// Contas de redes sociais entram como categoria "Redes Sociais".
+const socialItems = (await reader.collections.social.all())
+  .map(e => ({ id: e.slug, ...e.entry }))
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+  .map(a => ({
+    id: a.id,
+    title: a.title,
+    client: a.handle || a.client,
+    category: 'Redes Sociais',
+    cover: assetUrl(a.cover, '/portfolio/social/'),
+    description: a.segment ? `Gestão de conteúdo — ${a.segment.toLowerCase()}.` : 'Gestão de conteúdo para redes sociais.',
+    href: '/redes-sociais#contas',
+  }))
+
+const allProjects = [...projects, ...caseItems, ...socialItems]
+---
+
+<BaseLayout
+  title="Projetos — CHRONOS Creation"
+  description="Conheça os projetos audiovisuais, de branding e marketing produzidos pela CHRONOS Creation."
+>
+  <Hero
+    eyebrow="Portfólio"
+    title="Nossos projetos"
+    subtitle="Uma seleção do que produzimos — audiovisual, branding e estratégia em movimento. Filtre por categoria e assista."
+    backLink={true}
+    cta={{ label: 'Falar com a equipe', href: '/#contato' }}
+  />
+
+  <section class="bg-ink py-20 sm:py-24">
+    <div class="max-w-8xl mx-auto px-5 sm:px-8">
+      <ProjectShowcase projects={allProjects} showFilters={true} />
+    </div>
+  </section>
+
+  <CTAFinal />
+</BaseLayout>

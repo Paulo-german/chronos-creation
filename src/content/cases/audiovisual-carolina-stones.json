@@ -1,0 +1,28 @@
+{
+  "title": "Carolina Stones",
+  "client": "",
+  "segment": "Carolina Stones",
+  "service": "Audiovisual",
+  "cover": null,
+  "description": "Produções audiovisuais para a Carolina Stones Plantation House.",
+  "gallery": [],
+  "videos": [
+    {
+      "title": "03102025",
+      "url": ""
+    },
+    {
+      "title": "CAROLINA STONES ABRIL",
+      "url": ""
+    },
+    {
+      "title": "Carolina Stones Plantation House",
+      "url": ""
+    },
+    {
+      "title": "CArolina Stones SPRING The Finest Moment",
+      "url": ""
+    }
+  ],
+  "order": 10
+}
