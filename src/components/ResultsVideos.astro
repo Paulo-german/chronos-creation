@@ -1,0 +1,98 @@
+---
+import { reader, assetUrl } from '../lib/reader'
+
+const entries = await reader.collections.testimonials.all()
+const videos = entries
+  .map((e) => ({ id: e.slug, ...e.entry }))
+  .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+  .filter((t) => t.video)
+  .map((t) => ({
+    author: t.author,
+    company: t.company,
+    src: assetUrl(t.video, '/portfolio/testimonials/'),
+    poster: assetUrl(t.poster, '/portfolio/testimonials/'),
+  }))
+---
+
+{videos.length > 0 && (
+  <section class="bg-panel py-24 sm:py-28 border-y border-white/5">
+    <div class="max-w-8xl mx-auto px-5 sm:px-8">
+      <div data-reveal class="reveal mb-12 text-center">
+        <p class="eyebrow text-xs font-semibold uppercase text-cyan mb-3">Depoimentos</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold">Os resultados falam por si só</h2>
+        <p class="mt-2 text-mut max-w-xl mx-auto">Quem trabalhou com a Chronos conta como foi a experiência.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-5 max-w-4xl mx-auto">
+        {videos.map((v) => (
+          <button
+            type="button"
+            class="rv-video group relative rounded-2xl overflow-hidden aspect-video border border-white/5 ph"
+            data-src={v.src}
+            aria-label={`Assistir depoimento: ${v.author}`}
+          >
+            {v.poster && <img src={v.poster} alt={v.author} class="absolute inset-0 w-full h-full object-cover" loading="lazy" />}
+            <span class="absolute inset-0 bg-black/30 group-hover:bg-black/45 transition flex items-center justify-center">
+              <span class="flex items-center justify-center w-16 h-16 rounded-full bg-cyan/90 text-ink group-hover:scale-110 transition-transform">
+                <svg class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </span>
+            <span class="absolute left-5 bottom-4 text-left">
+              <span class="block text-sm font-bold">{v.author}</span>
+              {v.company && <span class="block text-xs text-white/70">{v.company}</span>}
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Modal de vídeo (depoimento) */}
+    <div class="rv-modal fixed inset-0 z-[100] hidden items-center justify-center bg-black/90 p-4 sm:p-8" role="dialog" aria-modal="true" aria-label="Depoimento em vídeo">
+      <button type="button" class="rv-close absolute top-5 right-5 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 transition" aria-label="Fechar">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="rv-media max-h-[88vh] flex items-center justify-center"></div>
+    </div>
+  </section>
+)}
+
+<script>
+  function initResultsVideos() {
+    const modal = document.querySelector<HTMLElement>('.rv-modal')
+    const media = document.querySelector<HTMLElement>('.rv-media')
+    if (!modal || !media) return
+
+    const open = (src: string) => {
+      media.innerHTML = ''
+      const v = document.createElement('video')
+      v.src = src
+      v.controls = true
+      v.autoplay = true
+      v.playsInline = true
+      v.className = 'max-h-[88vh] w-auto rounded-xl bg-black'
+      media.appendChild(v)
+      v.play?.().catch(() => {})
+      modal.classList.remove('hidden')
+      modal.classList.add('flex')
+      document.body.style.overflow = 'hidden'
+    }
+    const close = () => {
+      modal.classList.add('hidden')
+      modal.classList.remove('flex')
+      media.innerHTML = ''
+      document.body.style.overflow = ''
+    }
+
+    document.querySelectorAll<HTMLElement>('.rv-video').forEach((b) => {
+      b.addEventListener('click', () => { if (b.dataset.src) open(b.dataset.src) })
+    })
+    modal.querySelector('.rv-close')?.addEventListener('click', close)
+    modal.addEventListener('click', (e) => { if (e.target === modal) close() })
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('hidden')) close()
+    })
+  }
+
+  initResultsVideos()
+  document.addEventListener('astro:page-load', initResultsVideos)
+</script>

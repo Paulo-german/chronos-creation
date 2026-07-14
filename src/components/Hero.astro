@@ -56,13 +56,13 @@ const {
   {decorIcon && (
     <FloatingIcon src={decorIcon} class="right-[5%] top-[24%] w-32 lg:w-48" variant="b" speed={0.16} opacity={0.42} />
   )}
-  <div class="max-w-8xl mx-auto px-5 sm:px-8 relative z-10">
+  <div class="max-w-8xl mx-auto px-4 sm:px-8 relative z-10">
     <div class="text-center">
       {eyebrow && (
         <p class="eyebrow text-xs font-semibold uppercase text-cyan mb-5">{eyebrow}</p>
       )}
       <h1
-        class="font-extrabold text-white text-4xl sm:text-5xl lg:text-6xl uppercase leading-[0.95] tracking-tight max-w-5xl mx-auto"
+        class="font-extrabold text-white text-2xl sm:text-4xl lg:text-6xl uppercase leading-[0.95] tracking-tight max-w-5xl mx-auto"
         set:html={title}
       />
       <p class="mt-8 text-mut text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">{subtitle}</p>

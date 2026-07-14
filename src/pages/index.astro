@@ -4,6 +4,7 @@ export const prerender = true
 import { reader } from '../lib/reader'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Hero from '../components/Hero.astro'
+import ResultsVideos from '../components/ResultsVideos.astro'
 import MarqueeStrip from '../components/MarqueeStrip.astro'
 import Differentials from '../components/Differentials.astro'
 import About from '../components/About.astro'
@@ -30,6 +31,7 @@ const hero = home?.hero
     decorIcon="/icones/foguete.png"
   />
   <MarqueeStrip />
+  <ResultsVideos />
   <Differentials />
   <About />
   <Services />
